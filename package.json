@@ -4,12 +4,16 @@
   "description": "My personal JS tools and utilities",
   "main": "index.js",
   "scripts": {
-    "test": "./test.sh"
+    "test": "node_modules/.bin/jasmine",
+    "lint": "node_modules/.bin/tslint -c tslint.json --project .",
+    "tsc": "tsc"
   },
   "author": "Ondrej Koupil <ondrakoupil@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/jasmine": "^2.5.54",
-    "jasmine": "^2.8.0"
+    "jasmine": "^2.8.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
   }
 }

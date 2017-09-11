@@ -11,16 +11,16 @@ function relativeTime(input, language, now) {
         now = new Date();
     }
     switch (typeof input) {
-        case "object":
+        case 'object':
             if (!(input instanceof Date)) {
                 throw new Error('Given input must be a Date, parsable string or a number timestamp.');
             }
             date = input;
             break;
-        case "string":
+        case 'string':
             date = new Date(input);
             break;
-        case "number":
+        case 'number':
             var fixedInput = void 0;
             if (input < 2000000000) {
                 fixedInput = input * 1000;
@@ -62,19 +62,19 @@ function relativeTime(input, language, now) {
     }
     // do 24 hodin
     if (diff < 3600 * 1000 * 24) {
-        var yesterdayText = "";
-        if (date.getDay() == now.getDay() - 1) {
+        var yesterdayText = '';
+        if (date.getDay() === now.getDay() - 1) {
             yesterdayText = time_constants_1.Words.yesterdayAt[language] + ' ';
         }
         return yesterdayText + formatTimeOfDay(date);
     }
     // do 6 dnů
     if (diff < 3600 * 1000 * 24 * 6) {
-        var yesterdayText = "";
-        if (date.getDay() == now.getDay() - 1) {
+        var yesterdayText = '';
+        if (date.getDay() === now.getDay() - 1) {
             yesterdayText = time_constants_1.Words.yesterdayAt[language] + ' ';
         }
-        if (date.getDay() == 6 && now.getDay() == 0) {
+        if (date.getDay() === 6 && now.getDay() === 0) {
             yesterdayText = time_constants_1.Words.yesterdayAt[language] + ' ';
         }
         if (!yesterdayText) {
@@ -88,8 +88,8 @@ function relativeTime(input, language, now) {
     yearStart.setDate(1);
     yearStart.setMonth(1);
     // tento rok
-    if (yearStart.getFullYear() == date.getFullYear()) {
-        if (language == languages_enum_1.Languages.CZECH) {
+    if (yearStart.getFullYear() === date.getFullYear()) {
+        if (language === languages_enum_1.Languages.CZECH) {
             return (date.getDate()) + '. ' + time_constants_1.Months.namesGenitive[language][date.getMonth() + 1];
         }
         else {
@@ -97,7 +97,7 @@ function relativeTime(input, language, now) {
         }
     }
     // ještě dříve
-    if (language == languages_enum_1.Languages.CZECH) {
+    if (language === languages_enum_1.Languages.CZECH) {
         return (date.getDate()) + '. ' + time_constants_1.Months.namesGenitive[language][date.getMonth() + 1] + ' ' + (date.getFullYear());
     }
     else {
@@ -106,13 +106,13 @@ function relativeTime(input, language, now) {
 }
 exports.relativeTime = relativeTime;
 function formatTimeOfDay(date) {
-    var m = (date.getMinutes()) + "";
-    if (m.length == 1) {
-        m = "0" + m;
+    var m = (date.getMinutes()) + '';
+    if (m.length === 1) {
+        m = '0' + m;
     }
-    var h = (date.getHours()) + "";
-    if (h.length == 1) {
-        h = "0" + h;
+    var h = (date.getHours()) + '';
+    if (h.length === 1) {
+        h = '0' + h;
     }
     return h + ':' + m;
 }

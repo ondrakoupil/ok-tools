@@ -1,11 +1,9 @@
-
-
 import { Languages } from './languages.enum';
 import { Days, Months, Words } from './time-constants';
 import { pluralize } from './pluralize';
 
-export function relativeTime (
-	input: Date|number|string,
+export function relativeTime(
+	input: Date | number | string,
 	language: Languages = Languages.CZECH,
 	now: Date = null
 ): string {
@@ -17,18 +15,18 @@ export function relativeTime (
 	}
 
 	switch (typeof input) {
-		case "object":
+		case 'object':
 			if (!(input instanceof Date)) {
 				throw new Error('Given input must be a Date, parsable string or a number timestamp.');
 			}
 			date = input;
 			break;
 
-		case "string":
+		case 'string':
 			date = new Date(input);
 			break;
 
-		case "number":
+		case 'number':
 			let fixedInput: number;
 			if (input < 2000000000) {
 				fixedInput = <number>input * 1000;
@@ -66,20 +64,20 @@ export function relativeTime (
 
 	// do 1 hodiny
 	if (diff < 3600000) {
-		var minutes = Math.round(diff / 60000);
+		let minutes = Math.round(diff / 60000);
 		return pluralize(minutes, Words.minutesAgo[language]);
 	}
 
 	// do 10 hodin
 	if (diff < 3600 * 1000 * 10) {
-		var hours = Math.round(diff / (3600 * 1000));
+		let hours = Math.round(diff / (3600 * 1000));
 		return pluralize(hours, Words.hoursAgo[language]);
 	}
 
 	// do 24 hodin
 	if (diff < 3600 * 1000 * 24) {
-		var yesterdayText = "";
-		if (date.getDay() == now.getDay() - 1) {
+		let yesterdayText = '';
+		if (date.getDay() === now.getDay() - 1) {
 			yesterdayText = Words.yesterdayAt[language] + ' ';
 		}
 		return yesterdayText + formatTimeOfDay(date);
@@ -87,15 +85,15 @@ export function relativeTime (
 
 	// do 6 dnů
 	if (diff < 3600 * 1000 * 24 * 6) {
-		var yesterdayText = "";
-		if (date.getDay() == now.getDay() - 1) {
+		let yesterdayText = '';
+		if (date.getDay() === now.getDay() - 1) {
 			yesterdayText = Words.yesterdayAt[language] + ' ';
 		}
-		if (date.getDay() == 6 && now.getDay() == 0) {
+		if (date.getDay() === 6 && now.getDay() === 0) {
 			yesterdayText = Words.yesterdayAt[language] + ' ';
 		}
 		if (!yesterdayText) {
-			var dayInWeek = date.getDay();
+			let dayInWeek = date.getDay();
 			yesterdayText = Days.localAt[language][dayInWeek] + ' ';
 		}
 
@@ -108,8 +106,8 @@ export function relativeTime (
 	yearStart.setMonth(1);
 
 	// tento rok
-	if (yearStart.getFullYear() == date.getFullYear()) {
-		if (language == Languages.CZECH) {
+	if (yearStart.getFullYear() === date.getFullYear()) {
+		if (language === Languages.CZECH) {
 			return (date.getDate()) + '. ' + Months.namesGenitive[language][date.getMonth() + 1];
 		} else {
 			return Months.names[language][date.getMonth() + 1] + ' ' + (date.getDate());
@@ -117,7 +115,7 @@ export function relativeTime (
 	}
 
 	// ještě dříve
-	if (language == Languages.CZECH) {
+	if (language === Languages.CZECH) {
 		return (date.getDate()) + '. ' + Months.namesGenitive[language][date.getMonth() + 1] + ' ' + (date.getFullYear());
 	} else {
 		return Months.names[language][date.getMonth() + 1] + ' ' + (date.getDate()) + ', ' + (date.getFullYear());
@@ -126,13 +124,13 @@ export function relativeTime (
 }
 
 function formatTimeOfDay(date: Date) {
-	let m = (date.getMinutes()) + "";
-	if (m.length == 1) {
-		m = "0" + m;
+	let m = (date.getMinutes()) + '';
+	if (m.length === 1) {
+		m = '0' + m;
 	}
-	let h = (date.getHours()) + "";
-	if (h.length == 1) {
-		h = "0" + h;
+	let h = (date.getHours()) + '';
+	if (h.length === 1) {
+		h = '0' + h;
 	}
 	return h + ':' + m;
 }

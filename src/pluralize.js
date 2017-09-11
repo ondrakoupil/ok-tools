@@ -16,7 +16,7 @@ function pluralize(number, one, two, five, symbol) {
     if (two === void 0) { two = ''; }
     if (five === void 0) { five = ''; }
     if (symbol === void 0) { symbol = '%%'; }
-    if (one && typeof one == 'object' && one.length) {
+    if (one && typeof one === 'object' && one.length) {
         symbol = two;
         if (!symbol) {
             symbol = '%%';

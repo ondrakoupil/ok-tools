@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var pluralize_1 = require("../src/pluralize");
-describe("Pluralize function", function () {
-    it("should work as expected.", function pluralizeTest() {
+describe('Pluralize function', function () {
+    it('should work as expected.', function pluralizeTest() {
         var result = pluralize_1.pluralize(1, 'A', 'B', 'c');
         expect(result).toBe('A');
         result = pluralize_1.pluralize(3, 'A', 'B', 'c');
@@ -26,7 +26,7 @@ describe("Pluralize function", function () {
         result = pluralize_1.pluralize(10, 'XX%% rohlík', 'XX%% rohlíky', 'XX%% rohlíků', 'XX');
         expect(result).toBe('10%% rohlíků');
     });
-    it("should cope with less args", function () {
+    it('should cope with less args', function () {
         var result = pluralize_1.pluralize(10, 'A');
         expect(result).toBe('A');
         result = pluralize_1.pluralize(2, 'A');
@@ -36,7 +36,7 @@ describe("Pluralize function", function () {
         result = pluralize_1.pluralize(10, 'A', 'B');
         expect(result).toBe('B');
     });
-    it("should accept array argument", function () {
+    it('should accept array argument', function () {
         var result = pluralize_1.pluralize(3, ['a', 'b', 'c']);
         expect(result).toBe('b');
         result = pluralize_1.pluralize(10, ['X', 'Y']);

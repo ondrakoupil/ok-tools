@@ -3,11 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var relative_time_1 = require("../src/relative-time");
 var time_constants_1 = require("../src/time-constants");
 var languages_enum_1 = require("../src/languages.enum");
-describe("Relative Time function", function () {
-    it("should handle correct inputs", function () {
+describe('Relative Time function', function () {
+    it('should handle correct inputs', function () {
         var now = new Date();
         var someDate = new Date();
         someDate.setDate(Math.round(Math.random() * 27));
+        someDate.setFullYear(someDate.getFullYear() - 1);
         expect(relative_time_1.relativeTime(now)).toBeTruthy();
         expect(relative_time_1.relativeTime(someDate)).toBeTruthy();
         expect(relative_time_1.relativeTime(someDate.getTime())).toBeTruthy();
@@ -21,7 +22,7 @@ describe("Relative Time function", function () {
             relative_time_1.relativeTime(futureTime);
         }).toThrow();
     });
-    it("should work without giving exact time.", function () {
+    it('should work without giving exact time.', function () {
         // seconds ago
         var someTimeAgo = new Date();
         someTimeAgo.setTime(someTimeAgo.getTime() - 1000 * 5);
@@ -32,7 +33,7 @@ describe("Relative Time function", function () {
         yesterday.setTime(yesterday.getTime() - 1000 * 86400);
         expect(relative_time_1.relativeTime(yesterday)).toContain(time_constants_1.Words.yesterday[languages_enum_1.Languages.CZECH]);
     });
-    it("should return correct values for these test scenarios", function () {
+    it('should return correct values for these test scenarios', function () {
         var basicTime = new Date('2017-05-13 12:00:00');
         // Nyní
         expect(relative_time_1.relativeTime(basicTime, languages_enum_1.Languages.CZECH, basicTime)).toBe(time_constants_1.Words.now[languages_enum_1.Languages.CZECH]);

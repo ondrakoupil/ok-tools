@@ -12,7 +12,7 @@
  */
 export function pluralize(number: number, one: string|string[], two = '', five = '', symbol: string = '%%') {
 
-	if (one && typeof one == 'object' && one.length) {
+	if (one && typeof one === 'object' && one.length) {
 		symbol = two;
 		if (!symbol) {
 			symbol = '%%';

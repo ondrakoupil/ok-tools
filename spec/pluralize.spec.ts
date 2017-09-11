@@ -1,8 +1,8 @@
 import { pluralize } from '../src/pluralize';
 
-describe("Pluralize function", function() {
+describe('Pluralize function', function () {
 
-	it("should work as expected.", function pluralizeTest() {
+	it('should work as expected.', function pluralizeTest() {
 
 		let result = pluralize(1, 'A', 'B', 'c');
 		expect(result).toBe('A');
@@ -39,7 +39,7 @@ describe("Pluralize function", function() {
 
 	});
 
-	it("should cope with less args", function() {
+	it('should cope with less args', function () {
 
 		let result = pluralize(10, 'A');
 		expect(result).toBe('A');
@@ -55,7 +55,7 @@ describe("Pluralize function", function() {
 
 	});
 
-	it("should accept array argument", function() {
+	it('should accept array argument', function () {
 
 		let result = pluralize(3, ['a', 'b', 'c']);
 		expect(result).toBe('b');

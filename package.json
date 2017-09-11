@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/jasmine",
+    "browserify": "browserify src/*.js -o bundle.js",
+    "browserify-all": "browserify src/*.js spec/*.spec.js -o bundle.js",
+    "test-browsers": "npm run browserify-all && karma start --single-run; rm bundle.js",
     "lint": "node_modules/.bin/tslint -c tslint.json --project .",
     "tsc": "tsc"
   },
@@ -12,7 +15,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jasmine": "^2.5.54",
+    "browserify": "^14.4.0",
     "jasmine": "^2.8.0",
+    "karma": "^1.7.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-opera-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0",
     "tslint": "^5.7.0",
     "typescript": "^2.5.2"
   }

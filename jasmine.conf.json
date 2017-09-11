@@ -1,7 +1,0 @@
-{
-  "spec_files": [
-    "kalkulacka.test.js"
-  ],
-  "stopSpecOnExpectationFailure": false,
-  "random": false
-}

@@ -3,37 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var languages_enum_1 = require("./languages.enum");
 var time_constants_1 = require("./time-constants");
 var pluralize_1 = require("./pluralize");
+var parse_time_1 = require("./parse-time");
 function relativeTime(input, language, now) {
     if (language === void 0) { language = languages_enum_1.Languages.CZECH; }
     if (now === void 0) { now = null; }
-    var date;
+    var date = parse_time_1.parseTime(input);
+    var thatTime = date.getTime();
     if (!now) {
         now = new Date();
     }
-    switch (typeof input) {
-        case 'object':
-            if (!(input instanceof Date)) {
-                throw new Error('Given input must be a Date, parsable string or a number timestamp.');
-            }
-            date = input;
-            break;
-        case 'string':
-            date = new Date(input);
-            break;
-        case 'number':
-            var fixedInput = void 0;
-            if (input < 2000000000) {
-                fixedInput = input * 1000;
-            }
-            else {
-                fixedInput = input;
-            }
-            date = new Date(fixedInput);
-    }
-    if (!date.getTime() || isNaN(date.getTime())) {
-        throw new Error('Given input could not be parsed into a Date.');
-    }
-    var thatTime = date.getTime();
     var diff = now.getTime() - thatTime;
     // Budoucí datum - asi jen omylem, zaokrouhlíme na 0
     if (diff < 0 && diff > -60000) {

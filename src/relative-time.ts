@@ -1,6 +1,7 @@
 import { Languages } from './languages.enum';
 import { Days, Months, Words } from './time-constants';
 import { pluralize } from './pluralize';
+import { parseTime } from './parse-time';
 
 export function relativeTime(
 	input: Date | number | string,
@@ -8,39 +9,12 @@ export function relativeTime(
 	now: Date = null
 ): string {
 
-	let date: Date;
+	let date = parseTime(input);
+	let thatTime = date.getTime();
 
 	if (!now) {
 		now = new Date();
 	}
-
-	switch (typeof input) {
-		case 'object':
-			if (!(input instanceof Date)) {
-				throw new Error('Given input must be a Date, parsable string or a number timestamp.');
-			}
-			date = input;
-			break;
-
-		case 'string':
-			date = new Date(input);
-			break;
-
-		case 'number':
-			let fixedInput: number;
-			if (input < 2000000000) {
-				fixedInput = <number>input * 1000;
-			} else {
-				fixedInput = <number>input;
-			}
-			date = new Date(fixedInput);
-	}
-
-	if (!date.getTime() || isNaN(date.getTime())) {
-		throw new Error('Given input could not be parsed into a Date.');
-	}
-
-	let thatTime = date.getTime();
 
 	let diff = now.getTime() - thatTime;
 

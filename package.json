@@ -1,0 +1,15 @@
+{
+  "name": "ok-tools",
+  "version": "1.0.0",
+  "description": "My personal JS tools and utilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "./test.sh"
+  },
+  "author": "Ondrej Koupil <ondrakoupil@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "^2.5.54",
+    "jasmine": "^2.8.0"
+  }
+}

@@ -1,6 +1,7 @@
 import {relativeTime} from '../src/relative-time';
 import { Words } from '../src/time-constants';
 import { Languages } from '../src/languages.enum';
+import { parseTime } from '../src/parse-time';
 
 describe('Relative Time function', function() {
 
@@ -80,7 +81,7 @@ describe('Relative Time function', function() {
 
 	it('should return correct values for these test scenarios', function() {
 
-		let basicTime = new Date('2017-05-13 12:00:00');
+		let basicTime = parseTime('2017-05-13 12:00:00');
 
 		// Nyní
 		expect(

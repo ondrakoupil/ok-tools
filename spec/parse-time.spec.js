@@ -29,14 +29,14 @@ describe('ParseTime function', function () {
         expect(res.getFullYear()).toBe(2015);
         expect(res.getDate()).toBe(12);
         expect(res.getMonth()).toBe(3);
-        expect(res.getHours()).toBe(15);
+        expect(res.getHours()).toBe(15, 'Hours - parse string with time');
         expect(res.getMinutes()).toBe(12);
         expect(res.getSeconds()).toBe(16);
         res = parse_time_1.parseTime('2015-04-12T11:12:13');
         expect(res.getFullYear()).toBe(2015);
         expect(res.getDate()).toBe(12);
         expect(res.getMonth()).toBe(3);
-        expect(res.getHours()).toBe(Math.floor(11 - (new Date()).getTimezoneOffset() / 60));
+        expect(res.getHours()).toBe(11, 'Hours - parse string with time and T');
         expect(res.getMinutes()).toBe(12);
         expect(res.getSeconds()).toBe(13);
     });

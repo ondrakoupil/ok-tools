@@ -18,11 +18,11 @@ export function parseTime(input: string | Date | number) {
 			break;
 
 		case 'string':
-			let match = (<string>input).trim().match(/^(\d{4})-(\d{2})-(\d{2})(\s+(\d{2}):(\d{2}):(\d{2}))?$/);
+			let match = (<string>input).trim().match(/^(\d{4})-(\d{2})-(\d{2})([\sT]+(\d{2}):(\d{2}):(\d{2}))?$/);
 			if (match) {
 				input = match[2] + '/' + match[3] + '/' + match[1];
 				if (match[4]) {
-					input += match[4];
+					input += ' ' + match[5] + ':' + match[6] + ':' + match[7];
 				}
 			}
 			date = new Date(input);

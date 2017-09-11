@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var relative_time_1 = require("../src/relative-time");
 var time_constants_1 = require("../src/time-constants");
 var languages_enum_1 = require("../src/languages.enum");
+var parse_time_1 = require("../src/parse-time");
 describe('Relative Time function', function () {
     it('should handle correct inputs', function () {
         var now = new Date();
@@ -34,7 +35,7 @@ describe('Relative Time function', function () {
         expect(relative_time_1.relativeTime(yesterday)).toContain(time_constants_1.Words.yesterday[languages_enum_1.Languages.CZECH]);
     });
     it('should return correct values for these test scenarios', function () {
-        var basicTime = new Date('2017-05-13 12:00:00');
+        var basicTime = parse_time_1.parseTime('2017-05-13 12:00:00');
         // Nyní
         expect(relative_time_1.relativeTime(basicTime, languages_enum_1.Languages.CZECH, basicTime)).toBe(time_constants_1.Words.now[languages_enum_1.Languages.CZECH]);
         expect(relative_time_1.relativeTime('2017-05-13 12:00:02', languages_enum_1.Languages.ENGLISH, basicTime)).toBe(time_constants_1.Words.now[languages_enum_1.Languages.ENGLISH]);

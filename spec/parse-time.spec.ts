@@ -41,7 +41,7 @@ describe('ParseTime function', function() {
 		expect(res.getFullYear()).toBe(2015);
 		expect(res.getDate()).toBe(12);
 		expect(res.getMonth()).toBe(3);
-		expect(res.getHours()).toBe(15);
+		expect(res.getHours()).toBe(15, 'Hours - parse string with time');
 		expect(res.getMinutes()).toBe(12);
 		expect(res.getSeconds()).toBe(16);
 
@@ -50,7 +50,7 @@ describe('ParseTime function', function() {
 		expect(res.getFullYear()).toBe(2015);
 		expect(res.getDate()).toBe(12);
 		expect(res.getMonth()).toBe(3);
-		expect(res.getHours()).toBe(Math.floor(11 - (new Date()).getTimezoneOffset() / 60));
+		expect(res.getHours()).toBe(11, 'Hours - parse string with time and T');
 		expect(res.getMinutes()).toBe(12);
 		expect(res.getSeconds()).toBe(13);
 

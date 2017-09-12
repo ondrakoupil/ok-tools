@@ -47,4 +47,3 @@ function pluralize(number, one, two, five, symbol) {
     return five.replace(symbol, number + '');
 }
 exports.pluralize = pluralize;
-//# sourceMappingURL=pluralize.js.map

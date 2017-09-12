@@ -94,4 +94,3 @@ function formatTimeOfDay(date) {
     }
     return h + ':' + m;
 }
-//# sourceMappingURL=relative-time.js.map

@@ -16,14 +16,15 @@ function parseTime(input) {
             date = input;
             break;
         case 'string':
-            var match = input.trim().match(/^(\d{4})-(\d{2})-(\d{2})([\sT]+(\d{2}):(\d{2}):(\d{2}))?$/);
+            var stringInput = input;
+            var match = (stringInput).trim().match(/^(\d{4})-(\d{2})-(\d{2})([\sT]+(\d{2}):(\d{2}):(\d{2}))?$/);
             if (match) {
-                input = match[2] + '/' + match[3] + '/' + match[1];
+                stringInput = match[2] + '/' + match[3] + '/' + match[1];
                 if (match[4]) {
-                    input += ' ' + match[5] + ':' + match[6] + ':' + match[7];
+                    stringInput += ' ' + match[5] + ':' + match[6] + ':' + match[7];
                 }
             }
-            date = new Date(input);
+            date = new Date(stringInput);
             break;
         case 'number':
             var fixedInput = void 0;
@@ -41,3 +42,4 @@ function parseTime(input) {
     return date;
 }
 exports.parseTime = parseTime;
+//# sourceMappingURL=parse-time.js.map

@@ -9,3 +9,4 @@ __export(require("./pluralize"));
 __export(require("./relative-time"));
 __export(require("./time-constants"));
 __export(require("./urls"));
+//# sourceMappingURL=index.js.map

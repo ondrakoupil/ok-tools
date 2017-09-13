@@ -42,4 +42,3 @@ function parseTime(input) {
     return date;
 }
 exports.parseTime = parseTime;
-//# sourceMappingURL=parse-time.js.map

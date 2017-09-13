@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./languages.enum"));
+__export(require("./nl2br"));
 __export(require("./parse-time"));
 __export(require("./pluralize"));
 __export(require("./relative-time"));

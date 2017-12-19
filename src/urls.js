@@ -21,3 +21,4 @@ function technicalizeUrl(input) {
     return 'http://' + input;
 }
 exports.technicalizeUrl = technicalizeUrl;
+//# sourceMappingURL=urls.js.map

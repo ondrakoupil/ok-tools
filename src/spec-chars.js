@@ -11,3 +11,4 @@ function specChars(input) {
     return input.replace(/[&<>"']/g, function (m) { return map[m]; });
 }
 exports.specChars = specChars;
+//# sourceMappingURL=spec-chars.js.map

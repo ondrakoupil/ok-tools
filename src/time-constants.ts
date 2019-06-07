@@ -215,4 +215,24 @@ export class Words {
 		'en': 'yesterday at'
 	};
 
+	public static readonly tomorrow = {
+		'cs': 'zítra',
+		'en': 'tomorrow'
+	};
+
+	public static readonly tomorrowAt = {
+		'cs': 'zítra v',
+		'en': 'tomorrow at'
+	};	
+
+	public static readonly afterTomorrow = {
+		'cs': 'pozítří',
+		'en': 'day after tomorrow'
+	};
+
+	public static readonly tomorrowAt = {
+		'cs': 'pozítří v',
+		'en': 'day after tomorrow at'
+	};		
+
 }

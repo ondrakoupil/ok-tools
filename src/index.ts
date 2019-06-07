@@ -2,6 +2,7 @@ export * from './format-file-size';
 export * from './languages.enum';
 export * from './nl2br';
 export * from './number-format';
+export * from './opening-hours';
 export * from './parse-time';
 export * from './pluralize';
 export * from './relative-time';

@@ -209,6 +209,22 @@ var Words = /** @class */ (function () {
         'cs': 'včera v',
         'en': 'yesterday at'
     };
+    Words.tomorrow = {
+        'cs': 'zítra',
+        'en': 'tomorrow'
+    };
+    Words.tomorrowAt = {
+        'cs': 'zítra v',
+        'en': 'tomorrow at'
+    };
+    Words.afterTomorrow = {
+        'cs': 'pozítří',
+        'en': 'day after tomorrow'
+    };
+    Words.tomorrowAt = {
+        'cs': 'pozítří v',
+        'en': 'day after tomorrow at'
+    };
     return Words;
 }());
 exports.Words = Words;

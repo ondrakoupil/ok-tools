@@ -69,6 +69,15 @@ describe('Opening hours calculator', function () {
 		expect(oh.formatDay([{open: 5, close: 10}, {open: 12, close: 15.5}])).toBe('05:00 - 10:00, 12:00 - 15:30');
 	});
 
+
+	it ('should parse week', function() {
+		let parsed = oh.parseWeek(['1-19', '9-20', '9-20', '9-20', '', '9-20, 21-23', '']);
+		expect(parsed[1][0].open).toBe(1);
+		expect(parsed[5]).toEqual([]);
+		expect(parsed[6]).toEqual([{open: 9, close: 20}, {open: 21, close: 22}]);
+		expect(parsed[7]).toEqual([]);
+	});	
+
 	it('should format week intelligently', function() {
 
 		let week = oh.formatWeek({

@@ -54,7 +54,7 @@ export function parseWeek(input: { [key: number]: string }): OpeningHoursWeek {
 	};
 
 	if (input[0] && !input[7]) {
-		for (let i = 6; i >= 0; i++) {
+		for (let i = 6; i >= 0; i--) {
 			input[i + 1] = input[i];
 		}
 		delete input[0];
@@ -68,6 +68,9 @@ export function parseWeek(input: { [key: number]: string }): OpeningHoursWeek {
 }
 
 export function parseDay(input: string): OpeningHoursDay {
+	if (!input) {
+		return [];
+	}
 	let intervals = input.split(/[,;]+/).filter((r) => !!r);
 	let ints: OpeningHoursInterval[] = intervals.map(
 		(i) => {
@@ -103,6 +106,9 @@ export function parseDay(input: string): OpeningHoursDay {
 }
 
 export function parseInterval(input: string): OpeningHoursInterval {
+	if (!input) {
+		return null;
+	}
 	let parts = input.trim().split(/[\s-]+/).filter((r) => !!r);
 	if (parts.length === 2) {
 		let p = {

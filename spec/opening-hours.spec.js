@@ -1,7 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var oh = require("../src/opening-hours");
-var opening_hours_1 = require("../src/opening-hours");
+var oh = require('../src/opening-hours');
+var opening_hours_1 = require('../src/opening-hours');
 describe('Opening hours calculator', function () {
     it('should parse hours', function () {
         expect(oh.parseHour('10')).toBe(10);
@@ -55,6 +54,13 @@ describe('Opening hours calculator', function () {
     it('should format day', function () {
         expect(oh.formatDay([{ open: 5, close: 10 }, { open: 12, close: 15.5 }])).toBe('05:00 - 10:00, 12:00 - 15:30');
     });
+    it('should parse week', function () {
+        var parsed = oh.parseWeek(['1-19', '9-20', '9-20', '9-20', '', '9-20, 21-23', '']);
+        expect(parsed[1][0].open).toBe(1);
+        expect(parsed[5]).toEqual([]);
+        expect(parsed[6]).toEqual([{ open: 9, close: 20 }, { open: 21, close: 22 }]);
+        expect(parsed[7]).toEqual([]);
+    });
     it('should format week intelligently', function () {
         var week = oh.formatWeek({
             1: [{ open: 8, close: 12 }],
@@ -63,7 +69,7 @@ describe('Opening hours calculator', function () {
             4: [{ open: 8, close: 12 }],
             5: [{ open: 8, close: 15 }, { open: 16, close: 17 }],
             6: [{ open: 8, close: 10 }],
-            7: [],
+            7: []
         }, new Date('2019-05-13')); // monday
         expect(week.length).toBe(4);
         expect(week.map((function (r) { return r.isCurrent; }))).toEqual([true, false, false, false]);
@@ -88,7 +94,7 @@ describe('Opening hours calculator', function () {
             4: [{ open: 8, close: 12 }],
             5: [{ open: 8, close: 12 }],
             6: [{ open: 8, close: 12 }],
-            7: [{ open: 8, close: 12 }],
+            7: [{ open: 8, close: 12 }]
         }, new Date('2019-05-13'));
         expect(week2.length).toBe(1);
         expect(week2[0].isSingleDay).toBe(false);
@@ -105,7 +111,7 @@ describe('Opening hours calculator', function () {
             4: [{ open: 8, close: 12 }],
             5: [{ open: 8, close: 15 }, { open: 16, close: 17 }],
             6: [{ open: 8, close: 10 }],
-            7: [],
+            7: []
         };
         var res1 = opening_hours_1.processHours(week, new Date('2019-05-13T05:00:00')); // Monday
         expect(res1.currentStatus).toBe(oh.OpeningHoursStatus.CLOSED);
@@ -144,4 +150,3 @@ describe('Opening hours calculator', function () {
         expect(res5.nextChangeTime).toBe(8);
     });
 });
-//# sourceMappingURL=opening-hours.spec.js.map

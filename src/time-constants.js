@@ -221,7 +221,7 @@ var Words = /** @class */ (function () {
         'cs': 'pozítří',
         'en': 'day after tomorrow'
     };
-    Words.tomorrowAt = {
+    Words.afterTomorrowAt = {
         'cs': 'pozítří v',
         'en': 'day after tomorrow at'
     };

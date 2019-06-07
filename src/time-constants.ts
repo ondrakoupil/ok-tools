@@ -205,6 +205,16 @@ export class Words {
 		'en': ['%% hour ago', '%% hours ago', '%% hours ago']
 	};
 
+	public static readonly today = {
+		'cs': 'dnes',
+		'en': 'today'
+	};
+
+	public static readonly todayAt = {
+		'cs': 'dnes v',
+		'en': 'today at'
+	};
+
 	public static readonly yesterday = {
 		'cs': 'včera',
 		'en': 'yesterday'
@@ -230,7 +240,7 @@ export class Words {
 		'en': 'day after tomorrow'
 	};
 
-	public static readonly tomorrowAt = {
+	public static readonly afterTomorrowAt = {
 		'cs': 'pozítří v',
 		'en': 'day after tomorrow at'
 	};		

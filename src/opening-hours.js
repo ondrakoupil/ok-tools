@@ -1,10 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var OpeningHoursStatus;
 (function (OpeningHoursStatus) {
     OpeningHoursStatus[OpeningHoursStatus["CLOSED"] = 0] = "CLOSED";
     OpeningHoursStatus[OpeningHoursStatus["OPEN"] = 1] = "OPEN";
-})(OpeningHoursStatus = exports.OpeningHoursStatus || (exports.OpeningHoursStatus = {}));
+})(exports.OpeningHoursStatus || (exports.OpeningHoursStatus = {}));
+var OpeningHoursStatus = exports.OpeningHoursStatus;
 function parseWeek(input) {
     var r = {
         1: [],
@@ -13,10 +12,10 @@ function parseWeek(input) {
         4: [],
         5: [],
         6: [],
-        7: [],
+        7: []
     };
     if (input[0] && !input[7]) {
-        for (var i = 6; i >= 0; i++) {
+        for (var i = 6; i >= 0; i--) {
             input[i + 1] = input[i];
         }
         delete input[0];
@@ -28,6 +27,9 @@ function parseWeek(input) {
 }
 exports.parseWeek = parseWeek;
 function parseDay(input) {
+    if (!input) {
+        return [];
+    }
     var intervals = input.split(/[,;]+/).filter(function (r) { return !!r; });
     var ints = intervals.map(function (i) {
         var r;
@@ -55,11 +57,14 @@ function parseDay(input) {
 }
 exports.parseDay = parseDay;
 function parseInterval(input) {
+    if (!input) {
+        return null;
+    }
     var parts = input.trim().split(/[\s-]+/).filter(function (r) { return !!r; });
     if (parts.length === 2) {
         var p = {
             open: parseHour(parts[0]),
-            close: parseHour(parts[1]),
+            close: parseHour(parts[1])
         };
         if (p.open >= p.close) {
             throw new Error('Can not parse interval: ' + input);
@@ -152,7 +157,7 @@ function formatWeek(input, now) {
                 isSingleDay: true,
                 hours: thisDayFormatted,
                 isCurrent: false,
-                isOpen: !!thisDayFormatted,
+                isOpen: !!thisDayFormatted
             };
             currentFormatted = thisDayFormatted;
         }
@@ -244,7 +249,7 @@ function processHours(hours, now) {
         nextChangeDay: nextChangeDay,
         nextChangeTime: nextChange,
         nextChangeIsToday: nextChangeIsToday,
-        nextChangeIsTomorrow: nextChangeIsTomorrow,
+        nextChangeIsTomorrow: nextChangeIsTomorrow
     };
 }
 exports.processHours = processHours;
@@ -257,4 +262,3 @@ function clamp(n, low, high) {
     }
     return n;
 }
-//# sourceMappingURL=opening-hours.js.map

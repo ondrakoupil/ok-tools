@@ -42,7 +42,7 @@ export interface OpeningHoursFormattedRow {
 
 export type OpeningHoursFormatted = OpeningHoursFormattedRow[];
 
-export function parseWeek(input: { [key: number]: string }): OpeningHoursWeek {
+export function parseWeek(input: { [key: number]: string }, returnNullIfEmpty = false): OpeningHoursWeek|null {
 	let r = {
 		1: [],
 		2: [],
@@ -60,8 +60,16 @@ export function parseWeek(input: { [key: number]: string }): OpeningHoursWeek {
 		delete input[0];
 	}
 
+	let isAnything = false;
 	for (let i = 1; i <= 7; i++) {
 		r[i] = parseDay(input[i]);
+		if (r[i].length > 0) {
+			isAnything = true;
+		}
+	}
+
+	if (!isAnything && returnNullIfEmpty) {
+		return null;
 	}
 
 	return r;
@@ -116,9 +124,14 @@ export function parseInterval(input: string): OpeningHoursInterval {
 			close: parseHour(parts[1]),
 		};
 
-		if (p.open >= p.close) {
-			throw new Error('Can not parse interval: ' + input);
+		if (p.open === p.close) {
+			throw new Error('Interval is meaningless - ' + input);
 		}
+
+		if (p.open > p.close) {
+			p.close += 24;
+		}
+
 		return p;
 	}
 	throw new Error('Can not parse interval: ' + input);
@@ -152,7 +165,15 @@ export function parseHour(input: string): OpeningHour {
 }
 
 export function formatHour(input: OpeningHour): string {
-	let hour = Math.floor(input);
+	let fixedInput = input;
+	if (fixedInput > 24) {
+		fixedInput -= 24;
+	}
+	if (fixedInput > 24) {
+		throw new Error('Invalid input time - ' + input);
+	}
+
+	let hour = Math.floor(fixedInput);
 	let hourString = hour + '';
 	if (hour < 10) {
 		if (!hour) {
@@ -161,7 +182,7 @@ export function formatHour(input: OpeningHour): string {
 			hourString = '0' + hourString;
 		}
 	}
-	let minutes = Math.round((input - hour) * 60);
+	let minutes = Math.round((fixedInput - hour) * 60);
 	let minutesString = minutes + '';
 	if (minutes < 10) {
 		if (!minutes) {
@@ -239,6 +260,7 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 		day = 7;
 	}
 	let todayRules: OpeningHoursDay = hours[day];
+	let yesterdayRules: OpeningHoursDay = day === 1 ? hours[7] : hours[day - 1];
 	let thisTime = now.getHours() + now.getMinutes() / 60;
 
 	let isOpen = false;
@@ -247,8 +269,10 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 	let nextChangeIsOpening = null;
 	let nextChangeIsToday = false;
 	let nextChangeIsTomorrow = false;
+
+	// Standard scenario - today is just open or we open this day later
 	for (let interval of todayRules) {
-		if (interval.open < thisTime && interval.close > thisTime) {
+		if (interval.open <= thisTime && interval.close >= thisTime) {
 			isOpen = true;
 			nextChangeIsOpening = false;
 			nextChange = interval.close;
@@ -264,6 +288,32 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 		}
 	}
 
+	// Special scenario - we opened yesterday and still are open
+	if (!nextChange !== null && yesterdayRules.length) {
+		let thisTimeOverlapped = thisTime + 24;
+		for (let interval of yesterdayRules) {
+			if (interval.open <= thisTimeOverlapped && interval.close >= thisTimeOverlapped) {
+				isOpen = true;
+				nextChangeIsOpening = false;
+				nextChange = interval.close - 24;
+				nextChangeDay = day;
+				nextChangeIsToday = true;
+			}
+		}
+	}
+
+	// Special scenario - we are open and we close tomorrow
+	if (nextChange > 24) {
+		nextChange -= 24;
+		nextChangeDay += 1;
+		nextChangeIsToday = false;
+		nextChangeIsTomorrow = true;
+		if (nextChangeDay > 7) {
+			nextChangeDay -= 7;
+		}
+	}
+
+	// Standard scenario - we open tomorrow or some later day
 	if (nextChange === null) {
 		let followingDays = [];
 		let tomorrow = day + 1;

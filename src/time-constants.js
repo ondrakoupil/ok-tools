@@ -201,6 +201,14 @@ var Words = /** @class */ (function () {
         'cs': ['před %% hodinou', 'před %% hodinami', 'před %% hodinami'],
         'en': ['%% hour ago', '%% hours ago', '%% hours ago']
     };
+    Words.today = {
+        'cs': 'dnes',
+        'en': 'today'
+    };
+    Words.todayAt = {
+        'cs': 'dnes v',
+        'en': 'today at'
+    };
     Words.yesterday = {
         'cs': 'včera',
         'en': 'yesterday'

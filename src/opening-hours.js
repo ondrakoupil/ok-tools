@@ -1,10 +1,12 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var OpeningHoursStatus;
 (function (OpeningHoursStatus) {
     OpeningHoursStatus[OpeningHoursStatus["CLOSED"] = 0] = "CLOSED";
     OpeningHoursStatus[OpeningHoursStatus["OPEN"] = 1] = "OPEN";
-})(exports.OpeningHoursStatus || (exports.OpeningHoursStatus = {}));
-var OpeningHoursStatus = exports.OpeningHoursStatus;
-function parseWeek(input) {
+})(OpeningHoursStatus = exports.OpeningHoursStatus || (exports.OpeningHoursStatus = {}));
+function parseWeek(input, returnNullIfEmpty) {
+    if (returnNullIfEmpty === void 0) { returnNullIfEmpty = false; }
     var r = {
         1: [],
         2: [],
@@ -12,7 +14,7 @@ function parseWeek(input) {
         4: [],
         5: [],
         6: [],
-        7: []
+        7: [],
     };
     if (input[0] && !input[7]) {
         for (var i = 6; i >= 0; i--) {
@@ -20,8 +22,15 @@ function parseWeek(input) {
         }
         delete input[0];
     }
+    var isAnything = false;
     for (var i = 1; i <= 7; i++) {
         r[i] = parseDay(input[i]);
+        if (r[i].length > 0) {
+            isAnything = true;
+        }
+    }
+    if (!isAnything && returnNullIfEmpty) {
+        return null;
     }
     return r;
 }
@@ -64,10 +73,13 @@ function parseInterval(input) {
     if (parts.length === 2) {
         var p = {
             open: parseHour(parts[0]),
-            close: parseHour(parts[1])
+            close: parseHour(parts[1]),
         };
-        if (p.open >= p.close) {
-            throw new Error('Can not parse interval: ' + input);
+        if (p.open === p.close) {
+            throw new Error('Interval is meaningless - ' + input);
+        }
+        if (p.open > p.close) {
+            p.close += 24;
         }
         return p;
     }
@@ -102,7 +114,14 @@ function parseHour(input) {
 }
 exports.parseHour = parseHour;
 function formatHour(input) {
-    var hour = Math.floor(input);
+    var fixedInput = input;
+    if (fixedInput > 24) {
+        fixedInput -= 24;
+    }
+    if (fixedInput > 24) {
+        throw new Error('Invalid input time - ' + input);
+    }
+    var hour = Math.floor(fixedInput);
     var hourString = hour + '';
     if (hour < 10) {
         if (!hour) {
@@ -112,7 +131,7 @@ function formatHour(input) {
             hourString = '0' + hourString;
         }
     }
-    var minutes = Math.round((input - hour) * 60);
+    var minutes = Math.round((fixedInput - hour) * 60);
     var minutesString = minutes + '';
     if (minutes < 10) {
         if (!minutes) {
@@ -157,7 +176,7 @@ function formatWeek(input, now) {
                 isSingleDay: true,
                 hours: thisDayFormatted,
                 isCurrent: false,
-                isOpen: !!thisDayFormatted
+                isOpen: !!thisDayFormatted,
             };
             currentFormatted = thisDayFormatted;
         }
@@ -187,6 +206,7 @@ function processHours(hours, now) {
         day = 7;
     }
     var todayRules = hours[day];
+    var yesterdayRules = day === 1 ? hours[7] : hours[day - 1];
     var thisTime = now.getHours() + now.getMinutes() / 60;
     var isOpen = false;
     var nextChange = null;
@@ -194,9 +214,10 @@ function processHours(hours, now) {
     var nextChangeIsOpening = null;
     var nextChangeIsToday = false;
     var nextChangeIsTomorrow = false;
+    // Standard scenario - today is just open or we open this day later
     for (var _i = 0, todayRules_1 = todayRules; _i < todayRules_1.length; _i++) {
         var interval = todayRules_1[_i];
-        if (interval.open < thisTime && interval.close > thisTime) {
+        if (interval.open <= thisTime && interval.close >= thisTime) {
             isOpen = true;
             nextChangeIsOpening = false;
             nextChange = interval.close;
@@ -212,6 +233,31 @@ function processHours(hours, now) {
             }
         }
     }
+    // Special scenario - we opened yesterday and still are open
+    if (!nextChange !== null && yesterdayRules.length) {
+        var thisTimeOverlapped = thisTime + 24;
+        for (var _a = 0, yesterdayRules_1 = yesterdayRules; _a < yesterdayRules_1.length; _a++) {
+            var interval = yesterdayRules_1[_a];
+            if (interval.open <= thisTimeOverlapped && interval.close >= thisTimeOverlapped) {
+                isOpen = true;
+                nextChangeIsOpening = false;
+                nextChange = interval.close - 24;
+                nextChangeDay = day;
+                nextChangeIsToday = true;
+            }
+        }
+    }
+    // Special scenario - we are open and we close tomorrow
+    if (nextChange > 24) {
+        nextChange -= 24;
+        nextChangeDay += 1;
+        nextChangeIsToday = false;
+        nextChangeIsTomorrow = true;
+        if (nextChangeDay > 7) {
+            nextChangeDay -= 7;
+        }
+    }
+    // Standard scenario - we open tomorrow or some later day
     if (nextChange === null) {
         var followingDays = [];
         var tomorrow = day + 1;
@@ -224,13 +270,13 @@ function processHours(hours, now) {
         for (var i = 1; i < day; i++) {
             followingDays.push(i);
         }
-        for (var _a = 0, followingDays_1 = followingDays; _a < followingDays_1.length; _a++) {
-            var nextDay = followingDays_1[_a];
+        for (var _b = 0, followingDays_1 = followingDays; _b < followingDays_1.length; _b++) {
+            var nextDay = followingDays_1[_b];
             if (nextChange !== null) {
                 break;
             }
-            for (var _b = 0, _c = hours[nextDay]; _b < _c.length; _b++) {
-                var interval = _c[_b];
+            for (var _c = 0, _d = hours[nextDay]; _c < _d.length; _c++) {
+                var interval = _d[_c];
                 if (nextChange !== null) {
                     break;
                 }
@@ -249,7 +295,7 @@ function processHours(hours, now) {
         nextChangeDay: nextChangeDay,
         nextChangeTime: nextChange,
         nextChangeIsToday: nextChangeIsToday,
-        nextChangeIsTomorrow: nextChangeIsTomorrow
+        nextChangeIsTomorrow: nextChangeIsTomorrow,
     };
 }
 exports.processHours = processHours;
@@ -262,3 +308,4 @@ function clamp(n, low, high) {
     }
     return n;
 }
+//# sourceMappingURL=opening-hours.js.map

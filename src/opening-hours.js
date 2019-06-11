@@ -16,7 +16,7 @@ function parseWeek(input, returnNullIfEmpty) {
         6: [],
         7: [],
     };
-    if (input[0] && !input[7]) {
+    if (Array.isArray(input) && !(input.length === 8 && !input[0] && (input[7] || input[7] === ''))) {
         for (var i = 6; i >= 0; i--) {
             input[i + 1] = input[i];
         }

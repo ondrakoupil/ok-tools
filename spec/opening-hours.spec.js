@@ -76,6 +76,15 @@ describe('Opening hours calculator', function () {
         expect(parsed2[1][0].open).toBe(1);
         expect(parsed2[5][0].open).toBe(5);
         expect(parsed2[7][0].open).toBe(7);
+        var parsed3 = oh.parseWeek(['', '1-10', '2-20']);
+        expect(parsed3[1].length).toBe(0);
+        expect(parsed3[2][0].open).toBe(1);
+        expect(parsed3[3][0].open).toBe(2);
+        expect(parsed3[4].length).toBe(0);
+        var parsed4 = oh.parseWeek({ 2: '1-10', 4: '2-10', 6: '3-10' });
+        expect(parsed4[2][0].open).toBe(1);
+        expect(parsed4[4][0].open).toBe(2);
+        expect(parsed4[6][0].open).toBe(3);
     });
     it('should handle empty input when parsing week', function () {
         var parsed1 = oh.parseWeek([]);

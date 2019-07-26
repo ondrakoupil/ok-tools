@@ -1,4 +1,4 @@
-export function parseTime(input: string | Date | number) {
+export function parseTime(input: string | Date | number, returnNullOnInvalid = true) {
 
 	let date: Date;
 
@@ -12,6 +12,9 @@ export function parseTime(input: string | Date | number) {
 	switch (typeof input) {
 		case 'object':
 			if (!(input instanceof Date)) {
+				if (returnNullOnInvalid) {
+					return null;
+				}
 				throw new Error('Given input must be a Date, parsable string or a number timestamp.');
 			}
 			date = input;
@@ -27,6 +30,12 @@ export function parseTime(input: string | Date | number) {
 				}
 			}
 			date = new Date(stringInput);
+			if (!date.getTime() || isNaN(date.getTime())) {
+				if (returnNullOnInvalid) {
+					return null;
+				}
+				throw new Error('Given input could not be parsed into a Date: ' + stringInput);
+			}
 			break;
 
 		case 'number':
@@ -37,9 +46,19 @@ export function parseTime(input: string | Date | number) {
 				fixedInput = <number>input;
 			}
 			date = new Date(fixedInput);
+			if (!date.getTime() || isNaN(date.getTime())) {
+				if (returnNullOnInvalid) {
+					return null;
+				}
+				throw new Error('Given input could not be parsed into a Date: ' + input);
+			}
+
 	}
 
 	if (!date.getTime() || isNaN(date.getTime())) {
+		if (returnNullOnInvalid) {
+			return null;
+		}
 		throw new Error('Given input could not be parsed into a Date.');
 	}
 

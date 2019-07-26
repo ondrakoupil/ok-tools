@@ -1,3 +1,4 @@
+export * from './delay';
 export * from './format-file-size';
 export * from './languages.enum';
 export * from './nl2br';

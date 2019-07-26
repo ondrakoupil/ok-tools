@@ -8,6 +8,10 @@
 		"target": "es5",
 		"typeRoots": [
 			"node_modules/@types"
+		],
+		"lib": [
+			"es2015",
+			"dom"
 		]
 	},
 	"include": [

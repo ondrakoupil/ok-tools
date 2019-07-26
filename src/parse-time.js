@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function parseTime(input) {
+function parseTime(input, returnNullOnInvalid) {
+    if (returnNullOnInvalid === void 0) { returnNullOnInvalid = true; }
     var date;
     if (typeof input === 'string') {
         var number = parseInt(input, 10);
@@ -11,6 +12,9 @@ function parseTime(input) {
     switch (typeof input) {
         case 'object':
             if (!(input instanceof Date)) {
+                if (returnNullOnInvalid) {
+                    return null;
+                }
                 throw new Error('Given input must be a Date, parsable string or a number timestamp.');
             }
             date = input;
@@ -25,6 +29,12 @@ function parseTime(input) {
                 }
             }
             date = new Date(stringInput);
+            if (!date.getTime() || isNaN(date.getTime())) {
+                if (returnNullOnInvalid) {
+                    return null;
+                }
+                throw new Error('Given input could not be parsed into a Date: ' + stringInput);
+            }
             break;
         case 'number':
             var fixedInput = void 0;
@@ -35,8 +45,17 @@ function parseTime(input) {
                 fixedInput = input;
             }
             date = new Date(fixedInput);
+            if (!date.getTime() || isNaN(date.getTime())) {
+                if (returnNullOnInvalid) {
+                    return null;
+                }
+                throw new Error('Given input could not be parsed into a Date: ' + input);
+            }
     }
     if (!date.getTime() || isNaN(date.getTime())) {
+        if (returnNullOnInvalid) {
+            return null;
+        }
         throw new Error('Given input could not be parsed into a Date.');
     }
     return date;

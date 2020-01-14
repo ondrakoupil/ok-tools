@@ -1,1 +1,1 @@
-{"version":3,"file":"delay.js","sourceRoot":"","sources":["delay.ts"],"names":[],"mappings":";;AAAA,eAAsB,CAAC;IACtB,MAAM,CAAC,IAAI,OAAO,CAAC,UAAS,OAAO;QAClC,UAAU,CAAC,OAAO,CAAC,IAAI,CAAC,IAAI,CAAC,EAAE,CAAC,CAAC,CAAC;IACnC,CAAC,CAAC,CAAC;AACJ,CAAC;AAJD,sBAIC"}
+{"version":3,"file":"delay.js","sourceRoot":"","sources":["delay.ts"],"names":[],"mappings":";;AAAA,eAAsB,CAAS;IAC9B,MAAM,CAAC,IAAI,OAAO,CAAC,UAAS,OAAO,EAAE,MAAM;QAC1C,UAAU,CAAC,cAAQ,OAAO,EAAE,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC;IACrC,CAAC,CAAC,CAAC;AACJ,CAAC;AAJD,sBAIC"}

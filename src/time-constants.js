@@ -31,7 +31,21 @@ var Months = /** @class */ (function () {
             10: 'October',
             11: 'November',
             12: 'December'
-        }
+        },
+        'de': {
+            1: 'Januar',
+            2: 'Februar',
+            3: 'März',
+            4: 'April',
+            5: 'Mai',
+            6: 'Juni',
+            7: 'Juli',
+            8: 'August',
+            9: 'September',
+            10: 'Oktober',
+            11: 'November',
+            12: 'Dezember'
+        },
     };
     Months.namesGenitive = {
         'cs': {
@@ -61,7 +75,21 @@ var Months = /** @class */ (function () {
             10: 'october',
             11: 'november',
             12: 'december'
-        }
+        },
+        'de': {
+            1: 'januar',
+            2: 'februar',
+            3: 'märz',
+            4: 'april',
+            5: 'mai',
+            6: 'juni',
+            7: 'juli',
+            8: 'august',
+            9: 'september',
+            10: 'oktober',
+            11: 'november',
+            12: 'dezember'
+        },
     };
     Months.short = {
         'cs': {
@@ -91,6 +119,20 @@ var Months = /** @class */ (function () {
             10: 'Oct',
             11: 'Nov',
             12: 'Dec'
+        },
+        'de': {
+            1: 'Jan',
+            2: 'Feb',
+            3: 'Mär',
+            4: 'Apr',
+            5: 'Mai',
+            6: 'Jun',
+            7: 'Jul',
+            8: 'Aug',
+            9: 'Sep',
+            10: 'Okt',
+            11: 'Nov',
+            12: 'Dez'
         }
     };
     return Months;
@@ -117,6 +159,15 @@ var Days = /** @class */ (function () {
             5: 'Friday',
             6: 'Saturday',
             7: 'Sunday',
+        },
+        'de': {
+            1: 'Montag',
+            2: 'Dienstag',
+            3: 'Mittwoch',
+            4: 'Donnerstag',
+            5: 'Freitag',
+            6: 'Samstag',
+            7: 'Sonntag',
         }
     };
     Days.short = {
@@ -137,6 +188,15 @@ var Days = /** @class */ (function () {
             5: 'Fri',
             6: 'Sat',
             7: 'Sun',
+        },
+        'de': {
+            1: 'Mo',
+            2: 'Di',
+            3: 'Mi',
+            4: 'Do',
+            5: 'Fr',
+            6: 'Sa',
+            7: 'So',
         }
     };
     Days.local = {
@@ -157,7 +217,16 @@ var Days = /** @class */ (function () {
             5: 'on Friday',
             6: 'on Saturday',
             7: 'on Sunday',
-        }
+        },
+        'de': {
+            1: 'am Montag',
+            2: 'am Dienstag',
+            3: 'am Mittwoch',
+            4: 'am Donnerstag',
+            5: 'am Freitag',
+            6: 'am Samstag',
+            7: 'am Sonntag',
+        },
     };
     Days.localAt = {
         'cs': {
@@ -177,7 +246,16 @@ var Days = /** @class */ (function () {
             5: 'on Friday at',
             6: 'on Saturday at',
             7: 'on Sunday at',
-        }
+        },
+        'de': {
+            1: 'am Montag um',
+            2: 'am Dienstag um',
+            3: 'am Mittwoch um',
+            4: 'am Donnerstag um',
+            5: 'am Freitag um',
+            6: 'am Samstag um',
+            7: 'am Sonntag um',
+        },
     };
     return Days;
 }());
@@ -187,51 +265,63 @@ var Words = /** @class */ (function () {
     }
     Words.now = {
         'cs': 'teď',
-        'en': 'now'
+        'en': 'now',
+        'de': 'jetzt',
     };
     Words.momentAgo = {
         'cs': 'před chvílí',
-        'en': 'a moment ago'
+        'en': 'a moment ago',
+        'de': 'vor einem Moment',
     };
     Words.minutesAgo = {
         'cs': ['před %% minutou', 'před %% minutami', 'před %% minutami'],
-        'en': ['%% minute ago', '%% minutes ago', '%% minutes ago']
+        'en': ['%% minute ago', '%% minutes ago', '%% minutes ago'],
+        'de': ['vor %% Minute', 'vor %% Minuten', 'vor %% Minuten'],
     };
     Words.hoursAgo = {
         'cs': ['před %% hodinou', 'před %% hodinami', 'před %% hodinami'],
-        'en': ['%% hour ago', '%% hours ago', '%% hours ago']
+        'en': ['%% hour ago', '%% hours ago', '%% hours ago'],
+        'de': ['vor %% Stunde', 'vor %% Stunden', 'vor %% Stunden'],
     };
     Words.today = {
         'cs': 'dnes',
-        'en': 'today'
+        'en': 'today',
+        'de': 'heute',
     };
     Words.todayAt = {
         'cs': 'dnes v',
-        'en': 'today at'
+        'en': 'today at',
+        'de': 'heute um',
     };
     Words.yesterday = {
         'cs': 'včera',
-        'en': 'yesterday'
+        'en': 'yesterday',
+        'de': 'gestern',
     };
     Words.yesterdayAt = {
         'cs': 'včera v',
-        'en': 'yesterday at'
+        'en': 'yesterday at',
+        'de': 'gestern um',
     };
     Words.tomorrow = {
         'cs': 'zítra',
-        'en': 'tomorrow'
+        'en': 'tomorrow',
+        'de': 'morgen',
     };
     Words.tomorrowAt = {
         'cs': 'zítra v',
-        'en': 'tomorrow at'
+        'en': 'tomorrow at',
+        'de': 'morgen um',
     };
     Words.afterTomorrow = {
         'cs': 'pozítří',
-        'en': 'day after tomorrow'
+        'en': 'day after tomorrow',
+        'de': 'übermorgen'
     };
     Words.afterTomorrowAt = {
         'cs': 'pozítří v',
-        'en': 'day after tomorrow at'
+        'en': 'day after tomorrow at',
+        'de': 'übermorgen um',
     };
     return Words;
 }());

@@ -1,3 +1,4 @@
+export * from './data-factory';
 export * from './delay';
 export * from './format-file-size';
 export * from './languages.enum';

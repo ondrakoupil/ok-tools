@@ -53,18 +53,52 @@ function parseDay(input) {
     ints.sort(function (i1, i2) {
         return i1.open - i2.open;
     });
-    ints.forEach(function (interval, index) {
-        var next = ints[index + 1];
-        if (!next) {
-            return;
-        }
-        if (interval.close > next.open) {
-            throw new Error('Invalid sequence in intervals: ' + input);
-        }
-    });
+    ints = filterIntervalsForOverlapping(ints);
     return ints;
 }
 exports.parseDay = parseDay;
+function filterIntervalsForOverlapping(ints, recursiveFailsafe) {
+    if (recursiveFailsafe === void 0) { recursiveFailsafe = 0; }
+    if (recursiveFailsafe > 10) {
+        throw new Error('Could not resolve overlapping intervals: ' + JSON.stringify(ints));
+    }
+    // Check for interlapping intervals and merge them if necessary
+    var omitIntervalsWithTheseIndices = {};
+    ints.forEach(function (thisInterval, index) {
+        var nextInterval = ints[index + 1];
+        if (!nextInterval) {
+            return;
+        }
+        if (omitIntervalsWithTheseIndices[index]) {
+            return;
+        }
+        // Intervals are adjacent - we just merge them
+        if (thisInterval.close === nextInterval.open) {
+            thisInterval.close = nextInterval.close;
+            omitIntervalsWithTheseIndices[index + 1] = true;
+            return;
+        }
+        // Next is contained inside this one - we just omit the inner one
+        if (thisInterval.open <= nextInterval.open && thisInterval.close >= nextInterval.close) {
+            omitIntervalsWithTheseIndices[index + 1] = true;
+            return;
+        }
+        // Next is extending this one - we move ending time to the latter one
+        if (nextInterval.open <= thisInterval.close && nextInterval.close >= thisInterval.close) {
+            thisInterval.close = nextInterval.close;
+            omitIntervalsWithTheseIndices[index + 1] = true;
+            return;
+        }
+    });
+    // if (Object.keys(omitIntervalsWithTheseIndices).length > 0) {
+    // 	console.log('This failed check: ', ints, omitIntervalsWithTheseIndices);
+    // }
+    ints = ints.filter(function (interval, index) { return !omitIntervalsWithTheseIndices[index]; });
+    if (Object.keys(omitIntervalsWithTheseIndices).length > 0) {
+        ints = filterIntervalsForOverlapping(ints, recursiveFailsafe + 1);
+    }
+    return ints;
+}
 function parseInterval(input) {
     if (!input) {
         return null;

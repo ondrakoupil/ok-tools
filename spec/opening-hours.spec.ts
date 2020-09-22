@@ -38,7 +38,9 @@ describe('Opening hours calculator', function () {
 		expect(oh.formatHour(26)).toBe('02:00');
 		expect(oh.formatHour(30)).toBe('06:00');
 
-		expect(function() { oh.formatHour(50); }).toThrow();
+		expect(function () {
+			oh.formatHour(50);
+		}).toThrow();
 	});
 
 
@@ -60,25 +62,38 @@ describe('Opening hours calculator', function () {
 		expect(oh.formatInterval({open: 1, close: 10})).toBe('01:00 - 10:00');
 	});
 
-	it ('should parse day', function() {
+	it('should parse day', function () {
 		expect(oh.parseDay('10:00 - 12:30; 14:00 - 20:00')).toEqual([{open: 10, close: 12.5}, {open: 14, close: 20}]);
 		expect(oh.parseDay('8 - 16')).toEqual([{open: 8, close: 16}]);
 		expect(oh.parseDay('10:00 - 12:30, 14:00 - 20:00')).toEqual([{open: 10, close: 12.5}, {open: 14, close: 20}]);
 		expect(oh.parseDay('10:00 - 12:30, abcdefff, 14:00 - 20:00, asdfads')).toEqual([{open: 10, close: 12.5}, {open: 14, close: 20}]);
 		expect(oh.parseDay('14:00 - 20:00, 8 - 12')).toEqual([{open: 8, close: 12}, {open: 14, close: 20}]);
-
-		expect(() => oh.parseDay('8-20, 15-18')).toThrow();
-		expect(() => oh.parseDay('8-20, 6-9')).toThrow();
-		expect(() => oh.parseDay('8-20, 18-22')).toThrow();
-
 	});
 
-	it ('should format day', function() {
+	it('should recover from overlapping times in a day', function () {
+		expect(oh.parseDay('8:00-12:00, 8:00-13:00, 7:00-10:00')).toEqual([{open: 7, close: 13}]);
+		expect(oh.parseDay('15:00-18:00, 7:00-12:00')).toEqual([{open: 7, close: 12}, {open: 15, close: 18}]);
+		expect(oh.parseDay('8:00-12:00, 14:00-16:00, 16:00-18:00')).toEqual([{open: 8, close: 12}, {open: 14, close: 18}]);
+		expect(oh.parseDay('7:00-12:00, 05:00-15:00')).toEqual([{open: 5, close: 15}]);
+		expect(oh.parseDay('8:00-10:00, 9:00-11:00')).toEqual([{open: 8, close: 11}]);
+		expect(oh.parseDay('8:00-10:00, 7:00-9:00')).toEqual([{open: 7, close: 10}]);
+		expect(oh.parseDay('8:00-10:00, 8:00-10:00')).toEqual([{open: 8, close: 10}]);
+		expect(oh.parseDay('10:00-16:00, 12:00-14:00')).toEqual([{open: 10, close: 16}]);
+		expect(oh.parseDay('8:00-10:00, 10:00-12:00')).toEqual([{open: 8, close: 12}]);
+		expect(oh.parseDay('8:00-15:00, 10:00-12:00')).toEqual([{open: 8, close: 15}]);
+		expect(oh.parseDay('8:00-15:00, 10:00-12:00, 12:00-14:00')).toEqual([{open: 8, close: 15}]);
+		expect(oh.parseDay('8:00-15:00, 8:00-12:00, 12:00-15:00')).toEqual([{open: 8, close: 15}]);
+		expect(oh.parseDay('8:00-10:00, 10:00-12:00, 12:00-14:00')).toEqual([{open: 8, close: 14}]);
+		expect(oh.parseDay('8:00-10:00, 10:00-12:00, 13:00-14:00, 14:00-16:00')).toEqual([{open: 8, close: 12}, {open: 13, close: 16}]);
+		expect(oh.parseDay('6:00-12:00, 4:00-6:00, 5:00-11:00, 15:00-16:00')).toEqual([{open: 4, close: 12}, {open: 15, close: 16}]);
+	});
+
+	it('should format day', function () {
 		expect(oh.formatDay([{open: 5, close: 10}, {open: 12, close: 15.5}])).toBe('05:00 - 10:00, 12:00 - 15:30');
 	});
 
 
-	it ('should parse week', function() {
+	it('should parse week', function () {
 		let parsed = oh.parseWeek(['1-19', '9-20', '9-20', '9-20', '', '9-20, 21-23', '']);
 		expect(parsed[1][0].open).toBe(1);
 		expect(parsed[5]).toEqual([]);
@@ -86,7 +101,7 @@ describe('Opening hours calculator', function () {
 		expect(parsed[7]).toEqual([]);
 	});
 
-	it ('should parse week with different formats', function() {
+	it('should parse week with different formats', function () {
 		let parsed = oh.parseWeek(['', '1-10', '2-20', '3-10', '4-20', '5-10', '6-20', '7-10']);
 		expect(parsed[1][0].open).toBe(1);
 		expect(parsed[5][0].open).toBe(5);
@@ -110,7 +125,7 @@ describe('Opening hours calculator', function () {
 
 	});
 
-	it ('should handle empty input when parsing week', function() {
+	it('should handle empty input when parsing week', function () {
 		let parsed1 = oh.parseWeek([]);
 		expect(Object.keys(parsed1).length).toBe(7);
 		expect(parsed1[1].length).toBe(0);
@@ -126,7 +141,7 @@ describe('Opening hours calculator', function () {
 		expect(parsed4).toBeNull();
 	});
 
-	it('should format week intelligently', function() {
+	it('should format week intelligently', function () {
 
 		let week = oh.formatWeek({
 			1: [{open: 8, close: 12}],
@@ -176,7 +191,7 @@ describe('Opening hours calculator', function () {
 		expect(week2[0].hours).toBe('08:00 - 12:00');
 	});
 
-	it('should analyze opening hours', function() {
+	it('should analyze opening hours', function () {
 
 		let week = {
 			1: [{open: 8, close: 12}],
@@ -230,7 +245,7 @@ describe('Opening hours calculator', function () {
 
 	});
 
-	it ('should correctly analyze opening hours overflowing to next day', function() {
+	it('should correctly analyze opening hours overflowing to next day', function () {
 
 		let week = {
 			1: [{open: 10, close: 26}],
@@ -276,7 +291,7 @@ describe('Opening hours calculator', function () {
 
 	});
 
-	it ('should correctly analyze opening hours in complicated scenarios', function() {
+	it('should correctly analyze opening hours in complicated scenarios', function () {
 
 		let hours = parseWeek(['10-22', '10-05', '15-20, 23-3', '10-03', '10-03', '', '']);
 

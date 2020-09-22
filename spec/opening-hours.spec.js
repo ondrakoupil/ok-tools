@@ -31,7 +31,9 @@ describe('Opening hours calculator', function () {
         expect(oh.formatHour(11.75)).toBe('11:45');
         expect(oh.formatHour(26)).toBe('02:00');
         expect(oh.formatHour(30)).toBe('06:00');
-        expect(function () { oh.formatHour(50); }).toThrow();
+        expect(function () {
+            oh.formatHour(50);
+        }).toThrow();
     });
     it('should parse intervals', function () {
         expect(oh.parseInterval(' 10 - 12 ')).toEqual({ open: 10, close: 12 });
@@ -53,9 +55,23 @@ describe('Opening hours calculator', function () {
         expect(oh.parseDay('10:00 - 12:30, 14:00 - 20:00')).toEqual([{ open: 10, close: 12.5 }, { open: 14, close: 20 }]);
         expect(oh.parseDay('10:00 - 12:30, abcdefff, 14:00 - 20:00, asdfads')).toEqual([{ open: 10, close: 12.5 }, { open: 14, close: 20 }]);
         expect(oh.parseDay('14:00 - 20:00, 8 - 12')).toEqual([{ open: 8, close: 12 }, { open: 14, close: 20 }]);
-        expect(function () { return oh.parseDay('8-20, 15-18'); }).toThrow();
-        expect(function () { return oh.parseDay('8-20, 6-9'); }).toThrow();
-        expect(function () { return oh.parseDay('8-20, 18-22'); }).toThrow();
+    });
+    it('should recover from overlapping times in a day', function () {
+        expect(oh.parseDay('8:00-12:00, 8:00-13:00, 7:00-10:00')).toEqual([{ open: 7, close: 13 }]);
+        expect(oh.parseDay('15:00-18:00, 7:00-12:00')).toEqual([{ open: 7, close: 12 }, { open: 15, close: 18 }]);
+        expect(oh.parseDay('8:00-12:00, 14:00-16:00, 16:00-18:00')).toEqual([{ open: 8, close: 12 }, { open: 14, close: 18 }]);
+        expect(oh.parseDay('7:00-12:00, 05:00-15:00')).toEqual([{ open: 5, close: 15 }]);
+        expect(oh.parseDay('8:00-10:00, 9:00-11:00')).toEqual([{ open: 8, close: 11 }]);
+        expect(oh.parseDay('8:00-10:00, 7:00-9:00')).toEqual([{ open: 7, close: 10 }]);
+        expect(oh.parseDay('8:00-10:00, 8:00-10:00')).toEqual([{ open: 8, close: 10 }]);
+        expect(oh.parseDay('10:00-16:00, 12:00-14:00')).toEqual([{ open: 10, close: 16 }]);
+        expect(oh.parseDay('8:00-10:00, 10:00-12:00')).toEqual([{ open: 8, close: 12 }]);
+        expect(oh.parseDay('8:00-15:00, 10:00-12:00')).toEqual([{ open: 8, close: 15 }]);
+        expect(oh.parseDay('8:00-15:00, 10:00-12:00, 12:00-14:00')).toEqual([{ open: 8, close: 15 }]);
+        expect(oh.parseDay('8:00-15:00, 8:00-12:00, 12:00-15:00')).toEqual([{ open: 8, close: 15 }]);
+        expect(oh.parseDay('8:00-10:00, 10:00-12:00, 12:00-14:00')).toEqual([{ open: 8, close: 14 }]);
+        expect(oh.parseDay('8:00-10:00, 10:00-12:00, 13:00-14:00, 14:00-16:00')).toEqual([{ open: 8, close: 12 }, { open: 13, close: 16 }]);
+        expect(oh.parseDay('6:00-12:00, 4:00-6:00, 5:00-11:00, 15:00-16:00')).toEqual([{ open: 4, close: 12 }, { open: 15, close: 16 }]);
     });
     it('should format day', function () {
         expect(oh.formatDay([{ open: 5, close: 10 }, { open: 12, close: 15.5 }])).toBe('05:00 - 10:00, 12:00 - 15:30');

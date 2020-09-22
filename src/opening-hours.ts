@@ -42,7 +42,7 @@ export interface OpeningHoursFormattedRow {
 
 export type OpeningHoursFormatted = OpeningHoursFormattedRow[];
 
-export function parseWeek(input: { [key: number]: string }, returnNullIfEmpty = false): OpeningHoursWeek|null {
+export function parseWeek(input: { [key: number]: string }, returnNullIfEmpty = false): OpeningHoursWeek | null {
 	let r = {
 		1: [],
 		2: [],
@@ -98,19 +98,63 @@ export function parseDay(input: string): OpeningHoursDay {
 		}
 	);
 
+	ints = filterIntervalsForOverlapping(ints);
+
+	return ints;
+}
+
+function filterIntervalsForOverlapping(ints: OpeningHoursInterval[], recursiveFailsafe = 0): OpeningHoursInterval[] {
+
+	if (recursiveFailsafe > 10) {
+		throw new Error('Could not resolve overlapping intervals: ' + JSON.stringify(ints));
+	}
+
+	// Check for interlapping intervals and merge them if necessary
+	let omitIntervalsWithTheseIndices = {};
 	ints.forEach(
-		(interval: OpeningHoursInterval, index) => {
-			let next = ints[index + 1];
-			if (!next) {
+		(thisInterval: OpeningHoursInterval, index) => {
+			let nextInterval = ints[index + 1];
+			if (!nextInterval) {
 				return;
 			}
-			if (interval.close > next.open) {
-				throw new Error('Invalid sequence in intervals: ' + input);
+			if (omitIntervalsWithTheseIndices[index]) {
+				return;
+			}
+
+			// Intervals are adjacent - we just merge them
+			if (thisInterval.close === nextInterval.open) {
+				thisInterval.close = nextInterval.close;
+				omitIntervalsWithTheseIndices[index + 1] = true;
+				return;
+			}
+
+			// Next is contained inside this one - we just omit the inner one
+			if (thisInterval.open <= nextInterval.open && thisInterval.close >= nextInterval.close) {
+				omitIntervalsWithTheseIndices[index + 1] = true;
+				return;
+			}
+
+			// Next is extending this one - we move ending time to the latter one
+			if (nextInterval.open <= thisInterval.close && nextInterval.close >= thisInterval.close) {
+				thisInterval.close = nextInterval.close;
+				omitIntervalsWithTheseIndices[index + 1] = true;
+				return;
 			}
 		}
 	);
 
+	// if (Object.keys(omitIntervalsWithTheseIndices).length > 0) {
+	// 	console.log('This failed check: ', ints, omitIntervalsWithTheseIndices);
+	// }
+
+	ints = ints.filter((interval, index) => !omitIntervalsWithTheseIndices[index]);
+
+	if (Object.keys(omitIntervalsWithTheseIndices).length > 0) {
+		ints = filterIntervalsForOverlapping(ints, recursiveFailsafe + 1);
+	}
+
 	return ints;
+
 }
 
 export function parseInterval(input: string): OpeningHoursInterval {

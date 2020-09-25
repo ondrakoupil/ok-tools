@@ -67,6 +67,12 @@ function factory(input, definitions) {
             response[name] = date(clonedInput[name]);
         });
     }
+    if (definitions.object) {
+        var keys = Object.keys(definitions.object);
+        keys.map(function (key) {
+            response[key] = factory(clonedInput[key], definitions.object[key]);
+        });
+    }
     if (definitions.subItem) {
         var keys = Object.keys(definitions.subItem);
         keys.map(function (key) {

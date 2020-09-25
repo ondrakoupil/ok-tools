@@ -73,6 +73,11 @@ describe('DataFactory', function () {
 			dateA: '2020-01-05 20:00:01',
 			anything: 'ddd',
 			nothing: 'aaa',
+			someObject: {
+				a: 1,
+				b: 'B',
+				c: '2020-01-01 20:00:01',
+			}
 		};
 
 		let outcome = factory(input, {
@@ -81,6 +86,12 @@ describe('DataFactory', function () {
 			boolean: ['v1', 'v2'],
 			date: ['dateA', 'dateX'],
 			any: ['anything'],
+			object: {
+				someObject: {
+					string: ['a', 'b'],
+					date: ['c'],
+				},
+			},
 			default: {
 				zzz: 100,
 				numA: 20,
@@ -107,7 +118,9 @@ describe('DataFactory', function () {
 		expect(outcome.numMap2).toBe(30);
 		expect(outcome.anything).toBe('ddd');
 		expect(outcome.nothing).toBeUndefined();
-
+		expect(outcome.someObject.a).toBe('1');
+		expect(outcome.someObject.b).toBe('B');
+		expect(outcome.someObject.c.getTime()).toBe(date('2020-01-01 20:00:01').getTime());
 
 		expect(JSON.stringify(factory('a', {default: {'b': 10}}))).toBe('{"b":10}');
 		expect(JSON.stringify(factory('ahoj', {}))).toBe('{}');

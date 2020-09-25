@@ -86,6 +86,7 @@ describe('Opening hours calculator', function () {
 		expect(oh.parseDay('8:00-10:00, 10:00-12:00, 12:00-14:00')).toEqual([{open: 8, close: 14}]);
 		expect(oh.parseDay('8:00-10:00, 10:00-12:00, 13:00-14:00, 14:00-16:00')).toEqual([{open: 8, close: 12}, {open: 13, close: 16}]);
 		expect(oh.parseDay('6:00-12:00, 4:00-6:00, 5:00-11:00, 15:00-16:00')).toEqual([{open: 4, close: 12}, {open: 15, close: 16}]);
+		expect(oh.parseDay('10:00-12:00, 10:00-12:00')).toEqual([{open: 10, close: 12}]);
 	});
 
 	it('should format day', function () {

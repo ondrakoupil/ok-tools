@@ -59,6 +59,11 @@ describe('DataFactory', function () {
             dateA: '2020-01-05 20:00:01',
             anything: 'ddd',
             nothing: 'aaa',
+            someObjectMap: {
+                a: '1',
+                b: '3',
+                c: 100,
+            },
             someObject: {
                 a: 1,
                 b: 'B',
@@ -71,6 +76,10 @@ describe('DataFactory', function () {
             boolean: ['v1', 'v2'],
             date: ['dateA', 'dateX'],
             any: ['anything'],
+            objectMap: {
+                someObjectMap: data_factory_1.number,
+                anotherObjectMap: data_factory_1.string,
+            },
             object: {
                 someObject: {
                     string: ['a', 'b'],
@@ -105,6 +114,11 @@ describe('DataFactory', function () {
         expect(outcome.someObject.a).toBe('1');
         expect(outcome.someObject.b).toBe('B');
         expect(outcome.someObject.c.getTime()).toBe(data_factory_1.date('2020-01-01 20:00:01').getTime());
+        expect(Object.keys(outcome.someObjectMap).length).toBe(3);
+        expect(outcome.someObjectMap.a).toBe(1);
+        expect(outcome.someObjectMap.b).toBe(3);
+        expect(outcome.someObjectMap.c).toBe(100);
+        expect(JSON.stringify(outcome.anotherObjectMap)).toBe('{}');
         expect(JSON.stringify(data_factory_1.factory('a', { default: { 'b': 10 } }))).toBe('{"b":10}');
         expect(JSON.stringify(data_factory_1.factory('ahoj', {}))).toBe('{}');
         expect(JSON.stringify(data_factory_1.factory(null, {}))).toBe('{}');

@@ -42,6 +42,7 @@ interface DefinitionForFactory {
 	date?: string[];
 	boolean?: string[];
 	object?: { [key: string]: DefinitionForFactory };
+	objectMap?: { [key: string]: (any) => any };
 	subItem?: { [key: string]: (any) => any };
 	subItems?: { [key: string]: (any) => any };
 	map?: { [key: string]: (any) => any };
@@ -102,6 +103,22 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		keys.map(
 			(key) => {
 				response[key] = factory(clonedInput[key], definitions.object[key]);
+			}
+		);
+	}
+
+	if (definitions.objectMap) {
+		let keys = Object.keys(definitions.objectMap);
+		keys.map(
+			(key) => {
+				response[key] = {};
+				if (clonedInput[key]) {
+					Object.keys(clonedInput[key]).map(
+						(itemKey) => {
+							response[key][itemKey] = definitions.objectMap[key](clonedInput[key][itemKey]);
+						}
+					);
+				}
 			}
 		);
 	}

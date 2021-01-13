@@ -73,6 +73,17 @@ function factory(input, definitions) {
             response[key] = factory(clonedInput[key], definitions.object[key]);
         });
     }
+    if (definitions.objectMap) {
+        var keys = Object.keys(definitions.objectMap);
+        keys.map(function (key) {
+            response[key] = {};
+            if (clonedInput[key]) {
+                Object.keys(clonedInput[key]).map(function (itemKey) {
+                    response[key][itemKey] = definitions.objectMap[key](clonedInput[key][itemKey]);
+                });
+            }
+        });
+    }
     if (definitions.subItem) {
         var keys = Object.keys(definitions.subItem);
         keys.map(function (key) {

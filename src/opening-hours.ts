@@ -257,7 +257,6 @@ export function formatWeek(input: OpeningHoursWeek, now: Date = null): OpeningHo
 	let result: OpeningHoursFormatted = [];
 
 	let currentRow: OpeningHoursFormattedRow;
-	let currentFormatted = '';
 
 	for (let i = 1; i <= 7; i++) {
 		let thisDayFormatted = formatDay(input[i]);
@@ -273,7 +272,6 @@ export function formatWeek(input: OpeningHoursWeek, now: Date = null): OpeningHo
 				isCurrent: false,
 				isOpen: !!thisDayFormatted,
 			};
-			currentFormatted = thisDayFormatted;
 		} else if (currentRow) {
 			currentRow.isSingleDay = false;
 			currentRow.dayTo = i;

@@ -1,5 +1,3 @@
-import { Languages } from './languages.enum';
-
 export class Months {
 
 	public static readonly names = {

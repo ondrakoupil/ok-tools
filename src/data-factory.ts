@@ -208,7 +208,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 						}
 					}
 					if (!foundAlternative) {
-						if (typeof definitions.default[key] !== 'undefined') {
+						if (definitions.default && typeof definitions?.default[key] !== 'undefined') {
 							response[key] = definitions.default[key];
 						} else {
 							response[key] = null;

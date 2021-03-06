@@ -7,20 +7,23 @@ function formatWebAddress(input, mode, defaultScheme) {
     var scheme = '';
     var path = '';
     var match = input.match(/^\s*((\w{3,10}):\/\/)?([^\/]+)(\/(.*))?$/);
-    scheme = match[2] || '';
-    domain = match[3] || '';
-    path = match[5] || '';
-    if (!scheme) {
-        scheme = defaultScheme;
+    if (match) {
+        scheme = match[2] || '';
+        domain = match[3] || '';
+        path = match[5] || '';
+        if (!scheme) {
+            scheme = defaultScheme;
+        }
+        switch (mode) {
+            case 'link':
+                return scheme + '://' + domain + '/' + path;
+            case 'full':
+                return domain + (path ? ('/' + path) : '');
+            case 'short':
+                return domain;
+        }
     }
-    switch (mode) {
-        case 'link':
-            return scheme + '://' + domain + '/' + path;
-        case 'full':
-            return domain + (path ? ('/' + path) : '');
-        case 'short':
-            return domain;
-    }
+    return '';
 }
 exports.formatWebAddress = formatWebAddress;
 //# sourceMappingURL=web-address-formatter.js.map

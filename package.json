@@ -10,7 +10,8 @@
     "test-browsers": "npm run browserify-all && karma start --single-run; rm bundle.js",
     "lint": "node_modules/.bin/tslint -c tslint.json --project .",
     "barrel": "node_modules/.bin/barrelsby --delete -d src && node_modules/.bin/tslint --fix src/index.ts && echo \"export * from './src/index';\" > index.ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "tsc-watch": "tsc -w"
   },
   "repository": {
     "type": "git",

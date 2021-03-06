@@ -187,5 +187,37 @@ describe('DataFactory', function () {
         expect(outcome.subs[3].a).toBe(10);
         expect(outcome.subs[3].b).toBe('AAA');
     });
+    it('factory() method should handle enums', function () {
+        var input = {
+            ok: 'ok',
+            number: '9',
+            float: '9,54',
+            string: 10,
+            withDefault: 100,
+            mustBeNull: 100
+        };
+        var outcome = data_factory_1.factory(input, {
+            enum: {
+                ok: ['ok', 'hello'],
+                number: [7, 8, 9, 10],
+                float: [9.52, 9.53, 9.54, 9.55],
+                string: ['9', '10', '11'],
+                withDefault: [1, 2, 3],
+                withAnotherDefault: [10, 20, 30],
+                mustBeNull: [1, 2, 3],
+            },
+            default: {
+                withDefault: 2,
+                withAnotherDefault: 20,
+            },
+        });
+        expect(outcome.ok).toBe('ok');
+        expect(outcome.number).toBe(9);
+        expect(outcome.float).toBe(9.54);
+        expect(outcome.string).toBe('10');
+        expect(outcome.withDefault).toBe(2);
+        expect(outcome.mustBeNull).toBe(null);
+        expect(outcome.withAnotherDefault).toBe(20);
+    });
 });
 //# sourceMappingURL=data-factory.spec.js.map

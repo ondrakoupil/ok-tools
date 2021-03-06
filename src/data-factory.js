@@ -109,6 +109,43 @@ function factory(input, definitions) {
             response[key] = inputArray.map(function (v) { return definitions.subItems[key](v); });
         });
     }
+    if (definitions.enum) {
+        var keys = Object.keys(definitions.enum);
+        keys.map(function (key) {
+            var allowedValues = definitions.enum[key];
+            if (!Array.isArray(allowedValues)) {
+                throw new Error('Not an array: definitions.enum[' + key + ']');
+            }
+            if (allowedValues.indexOf(clonedInput[key]) === -1) {
+                var foundAlternative = false;
+                if (typeof clonedInput[key] === 'number') {
+                    var stringVersion = string(clonedInput[key]);
+                    if (allowedValues.indexOf(stringVersion) !== -1) {
+                        response[key] = stringVersion;
+                        foundAlternative = true;
+                    }
+                }
+                else if (typeof clonedInput[key] === 'string') {
+                    var numericVersion = number(clonedInput[key]);
+                    if (allowedValues.indexOf(numericVersion) !== -1) {
+                        response[key] = numericVersion;
+                        foundAlternative = true;
+                    }
+                }
+                if (!foundAlternative) {
+                    if (typeof definitions.default[key] !== 'undefined') {
+                        response[key] = definitions.default[key];
+                    }
+                    else {
+                        response[key] = null;
+                    }
+                }
+            }
+            else {
+                response[key] = clonedInput[key];
+            }
+        });
+    }
     if (definitions.map) {
         var keys = Object.keys(definitions.map);
         keys.map(function (key) {

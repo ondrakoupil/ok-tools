@@ -41,11 +41,42 @@ interface DefinitionForFactory {
 	string?: string[];
 	date?: string[];
 	boolean?: string[];
+
+	/**
+	 * Property should be object. Supply their own DefinitionForFactory.
+	 * Similar to subItem, but here, give just a definition of the subobject.
+	 */
 	object?: { [key: string]: DefinitionForFactory };
+
+	/**
+	 * Property should be object. Apply a function for every its property to normalize it.
+	 */
 	objectMap?: { [key: string]: (any) => any };
+
+	/**
+	 * Property should be object. Apply a factory function for it.
+	 * Similar to object, but here, give a factory function.
+	 */
 	subItem?: { [key: string]: (any) => any };
+
+	/**
+	 * Property should be an array of objects. Apply a factory function to each item.
+	 */
 	subItems?: { [key: string]: (any) => any };
+
+	/**
+	 * After applying all other rules and checks, apply a map function to resulting values.
+	 */
 	map?: { [key: string]: (any) => any };
+
+	/**
+	 * The value must be in array of given options. It also normalizes strings/numbers.
+	 */
+	enum?: { [key: string]: (string | number)[] };
+
+	/**
+	 * Anything can be in there properties. Do not check anything.
+	 */
 	any?: string[];
 }
 
@@ -62,7 +93,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		definitions.any.map(
 			(name) => {
 				response[name] = clonedInput[name];
-			}
+			},
 		);
 	}
 
@@ -70,7 +101,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		definitions.number.map(
 			(name) => {
 				response[name] = number(clonedInput[name]);
-			}
+			},
 		);
 	}
 
@@ -78,7 +109,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		definitions.string.map(
 			(name) => {
 				response[name] = string(clonedInput[name]);
-			}
+			},
 		);
 	}
 
@@ -86,7 +117,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		definitions.boolean.map(
 			(name) => {
 				response[name] = boolean(clonedInput[name]);
-			}
+			},
 		);
 	}
 
@@ -94,7 +125,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		definitions.date.map(
 			(name) => {
 				response[name] = date(clonedInput[name]);
-			}
+			},
 		);
 	}
 
@@ -103,7 +134,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		keys.map(
 			(key) => {
 				response[key] = factory(clonedInput[key], definitions.object[key]);
-			}
+			},
 		);
 	}
 
@@ -116,10 +147,10 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 					Object.keys(clonedInput[key]).map(
 						(itemKey) => {
 							response[key][itemKey] = definitions.objectMap[key](clonedInput[key][itemKey]);
-						}
+						},
 					);
 				}
-			}
+			},
 		);
 	}
 
@@ -131,7 +162,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 					throw new Error('subItem[' + key + '] must be a function!');
 				}
 				response[key] = definitions.subItem[key](clonedInput[key]);
-			}
+			},
 		);
 	}
 
@@ -149,7 +180,44 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 					throw new Error(key + ' is not an array.');
 				}
 				response[key] = inputArray.map((v) => definitions.subItems[key](v));
-			}
+			},
+		);
+	}
+
+	if (definitions.enum) {
+		let keys = Object.keys(definitions.enum);
+		keys.map(
+			(key) => {
+				let allowedValues = definitions.enum[key];
+				if (!Array.isArray(allowedValues)) {
+					throw new Error('Not an array: definitions.enum[' + key + ']');
+				}
+				if (allowedValues.indexOf(clonedInput[key]) === -1) {
+					let foundAlternative = false;
+					if (typeof clonedInput[key] === 'number') {
+						let stringVersion = string(clonedInput[key]);
+						if (allowedValues.indexOf(stringVersion) !== -1) {
+							response[key] = stringVersion;
+							foundAlternative = true;
+						}
+					} else if (typeof clonedInput[key] === 'string') {
+						let numericVersion = number(clonedInput[key]);
+						if (allowedValues.indexOf(numericVersion) !== -1) {
+							response[key] = numericVersion;
+							foundAlternative = true;
+						}
+					}
+					if (!foundAlternative) {
+						if (typeof definitions.default[key] !== 'undefined') {
+							response[key] = definitions.default[key];
+						} else {
+							response[key] = null;
+						}
+					}
+				} else {
+					response[key] = clonedInput[key];
+				}
+			},
 		);
 	}
 
@@ -161,7 +229,7 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 					throw new Error('Not a function: definitions.map[' + key + ']');
 				}
 				response[key] = definitions.map[key](response[key]);
-			}
+			},
 		);
 	}
 

@@ -31,6 +31,6 @@
     "karma-opera-launcher": "^1.0.0",
     "karma-safari-launcher": "^1.0.0",
     "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
+    "typescript": ">=3.7"
   }
 }

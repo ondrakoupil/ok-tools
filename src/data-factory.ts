@@ -46,8 +46,10 @@ interface DefinitionForFactory {
 	 * Use data from original key in source for another key in created object
 	 *
 	 * from: { "target": "source" } means that source's "source" property will be copied into returned object's "target" property.
+	 *
+	 * Also, you can supply a function that receives the source object and returns expected value.
 	 */
-	from?: { [key: string]: string };
+	from?: { [key: string]: (string | ((any) => any)) };
 
 	/**
 	 * Property should be object. Supply their own DefinitionForFactory.
@@ -101,11 +103,16 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		keys.forEach(
 			(key) => {
 				let value = definitions.from[key];
-				if (typeof clonedInput[value] !== 'undefined') {
-					clonedInput[key] = clonedInput[value];
+				if (typeof value === 'function') {
+					let out = value(clonedInput);
+					clonedInput[key] = out;
 				} else {
-					if (definitions.default && typeof definitions.default[value] !== 'undefined') {
-						clonedInput[key] = definitions.default[value];
+					if (typeof clonedInput[value] !== 'undefined') {
+						clonedInput[key] = clonedInput[value];
+					} else {
+						if (definitions.default && typeof definitions.default[value] !== 'undefined') {
+							clonedInput[key] = definitions.default[value];
+						}
 					}
 				}
 			}

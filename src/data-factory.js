@@ -47,12 +47,18 @@ function factory(input, definitions) {
         var keys = Object.keys(definitions.from);
         keys.forEach(function (key) {
             var value = definitions.from[key];
-            if (typeof clonedInput[value] !== 'undefined') {
-                clonedInput[key] = clonedInput[value];
+            if (typeof value === 'function') {
+                var out = value(clonedInput);
+                clonedInput[key] = out;
             }
             else {
-                if (definitions.default && typeof definitions.default[value] !== 'undefined') {
-                    clonedInput[key] = definitions.default[value];
+                if (typeof clonedInput[value] !== 'undefined') {
+                    clonedInput[key] = clonedInput[value];
+                }
+                else {
+                    if (definitions.default && typeof definitions.default[value] !== 'undefined') {
+                        clonedInput[key] = definitions.default[value];
+                    }
                 }
             }
         });

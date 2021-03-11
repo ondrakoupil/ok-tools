@@ -230,16 +230,18 @@ describe('DataFactory', function () {
                 hundred: 'ten',
                 deset: 'ten',
                 m: 'million',
+                func: function (s) { return (s.ten * 2); },
             },
             default: {
                 m: 1000000,
             },
-            number: ['hundred', 'num', 'deset', 'm'],
+            number: ['hundred', 'num', 'deset', 'm', 'func'],
         });
         expect(result.hundred).toBe(10);
         expect(result.deset).toBe(10);
         expect(result.num).toBe(1000);
         expect(result.m).toBe(1000000);
+        expect(result.func).toBe(20);
     });
 });
 //# sourceMappingURL=data-factory.spec.js.map

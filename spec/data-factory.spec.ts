@@ -276,11 +276,12 @@ describe('DataFactory', function () {
 					hundred: 'ten',
 					deset: 'ten',
 					m: 'million',
+					func: (s) => (s.ten * 2),
 				},
 				default: {
 					m: 1000000,
 				},
-				number: ['hundred', 'num', 'deset', 'm'],
+				number: ['hundred', 'num', 'deset', 'm', 'func'],
 			}
 		);
 
@@ -288,6 +289,7 @@ describe('DataFactory', function () {
 		expect(result.deset).toBe(10);
 		expect(result.num).toBe(1000);
 		expect(result.m).toBe(1000000);
+		expect(result.func).toBe(20);
 
 	});
 

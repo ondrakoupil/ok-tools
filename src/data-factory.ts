@@ -263,6 +263,18 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 		);
 	}
 
+	if (definitions.from) {
+		let keys = Object.keys(definitions.from);
+		keys.forEach(
+			(key) => {
+				if (typeof response[key] === 'undefined') {
+					response[key] = clonedInput[key];
+				}
+			}
+		);
+	}
+
+
 	return response;
 
 }

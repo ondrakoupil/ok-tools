@@ -176,6 +176,14 @@ function factory(input, definitions) {
             response[key] = definitions.map[key](response[key]);
         });
     }
+    if (definitions.from) {
+        var keys = Object.keys(definitions.from);
+        keys.forEach(function (key) {
+            if (typeof response[key] === 'undefined') {
+                response[key] = clonedInput[key];
+            }
+        });
+    }
     return response;
 }
 exports.factory = factory;

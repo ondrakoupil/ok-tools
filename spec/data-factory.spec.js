@@ -227,21 +227,30 @@ describe('DataFactory', function () {
         };
         var result = data_factory_1.factory(source, {
             from: {
-                hundred: 'ten',
                 deset: 'ten',
+                sto: 'hundred',
                 m: 'million',
                 func: function (s) { return (s.ten * 2); },
+                onlyInFrom: function () { return 1234; },
+                onlyInFrom2: 'hundred',
+                onlyInFrom3: function (s) { return s.num; },
+                stringFrom: 'ten'
             },
             default: {
                 m: 1000000,
             },
-            number: ['hundred', 'num', 'deset', 'm', 'func'],
+            number: ['hundred', 'num', 'deset', 'm', 'func', 'sto'],
+            string: ['stringFrom'],
         });
-        expect(result.hundred).toBe(10);
         expect(result.deset).toBe(10);
+        expect(result.sto).toBe(100);
         expect(result.num).toBe(1000);
         expect(result.m).toBe(1000000);
         expect(result.func).toBe(20);
+        expect(result.onlyInFrom).toBe(1234);
+        expect(result.onlyInFrom2).toBe('100');
+        expect(result.onlyInFrom3).toBe('1000');
+        expect(result.stringFrom).toBe('10');
     });
 });
 //# sourceMappingURL=data-factory.spec.js.map

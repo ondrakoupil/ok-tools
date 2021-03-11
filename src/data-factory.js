@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.factory = exports.date = exports.boolean = exports.string = exports.number = void 0;
 var parse_time_1 = require("./parse-time");
 function number(input) {
     if (typeof input === 'string') {
@@ -42,6 +43,20 @@ function factory(input, definitions) {
     }
     var response = Object.assign({}, definitions.default);
     var clonedInput = Object.assign({}, definitions.default, input);
+    if (definitions.from) {
+        var keys = Object.keys(definitions.from);
+        keys.forEach(function (key) {
+            var value = definitions.from[key];
+            if (typeof clonedInput[value] !== 'undefined') {
+                clonedInput[key] = clonedInput[value];
+            }
+            else {
+                if (definitions.default && typeof definitions.default[value] !== 'undefined') {
+                    clonedInput[key] = definitions.default[value];
+                }
+            }
+        });
+    }
     if (definitions.any) {
         definitions.any.map(function (name) {
             response[name] = clonedInput[name];
@@ -133,7 +148,7 @@ function factory(input, definitions) {
                     }
                 }
                 if (!foundAlternative) {
-                    if (typeof definitions.default[key] !== 'undefined') {
+                    if (definitions.default && typeof (definitions === null || definitions === void 0 ? void 0 : definitions.default[key]) !== 'undefined') {
                         response[key] = definitions.default[key];
                     }
                     else {

@@ -219,5 +219,27 @@ describe('DataFactory', function () {
         expect(outcome.mustBeNull).toBe(null);
         expect(outcome.withAnotherDefault).toBe(20);
     });
+    it('factory() should use "from" correctly', function () {
+        var source = {
+            hundred: '100',
+            ten: 10,
+            num: '1000',
+        };
+        var result = data_factory_1.factory(source, {
+            from: {
+                hundred: 'ten',
+                deset: 'ten',
+                m: 'million',
+            },
+            default: {
+                m: 1000000,
+            },
+            number: ['hundred', 'num', 'deset', 'm'],
+        });
+        expect(result.hundred).toBe(10);
+        expect(result.deset).toBe(10);
+        expect(result.num).toBe(1000);
+        expect(result.m).toBe(1000000);
+    });
 });
 //# sourceMappingURL=data-factory.spec.js.map

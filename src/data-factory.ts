@@ -43,6 +43,13 @@ interface DefinitionForFactory {
 	boolean?: string[];
 
 	/**
+	 * Use data from original key in source for another key in created object
+	 *
+	 * from: { "target": "source" } means that source's "source" property will be copied into returned object's "target" property.
+	 */
+	from?: { [key: string]: string };
+
+	/**
 	 * Property should be object. Supply their own DefinitionForFactory.
 	 * Similar to subItem, but here, give just a definition of the subobject.
 	 */
@@ -88,6 +95,22 @@ export function factory(input: any, definitions: DefinitionForFactory): any {
 
 	let response = Object.assign({}, definitions.default);
 	let clonedInput = Object.assign({}, definitions.default, input);
+
+	if (definitions.from) {
+		let keys = Object.keys(definitions.from);
+		keys.forEach(
+			(key) => {
+				let value = definitions.from[key];
+				if (typeof clonedInput[value] !== 'undefined') {
+					clonedInput[key] = clonedInput[value];
+				} else {
+					if (definitions.default && typeof definitions.default[value] !== 'undefined') {
+						clonedInput[key] = definitions.default[value];
+					}
+				}
+			}
+		);
+	}
 
 	if (definitions.any) {
 		definitions.any.map(

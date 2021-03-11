@@ -261,4 +261,34 @@ describe('DataFactory', function () {
 
 	});
 
+	it ('factory() should use "from" correctly', function() {
+
+		let source = {
+			hundred: '100',
+			ten: 10,
+			num: '1000',
+		};
+
+		let result = factory(
+			source,
+			{
+				from: {
+					hundred: 'ten',
+					deset: 'ten',
+					m: 'million',
+				},
+				default: {
+					m: 1000000,
+				},
+				number: ['hundred', 'num', 'deset', 'm'],
+			}
+		);
+
+		expect(result.hundred).toBe(10);
+		expect(result.deset).toBe(10);
+		expect(result.num).toBe(1000);
+		expect(result.m).toBe(1000000);
+
+	});
+
 });

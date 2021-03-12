@@ -89,7 +89,7 @@ interface DefinitionForFactory {
 	any?: string[];
 }
 
-export function factory(input: any, definitions: DefinitionForFactory): any {
+export function factory<T = any>(input: any, definitions: DefinitionForFactory): T {
 
 	if (!input || typeof input !== 'object') {
 		return Object.assign({}, definitions.default);

@@ -94,6 +94,22 @@ function factory(input, definitions) {
             response[key] = factory(clonedInput[key], definitions.object[key]);
         });
     }
+    if (definitions.objects) {
+        var keys = Object.keys(definitions.objects);
+        keys.map(function (key) {
+            if (typeof definitions.objects[key] !== 'object') {
+                throw new Error('objects[' + key + '] must be a object with definition!');
+            }
+            var inputArray = clonedInput[key];
+            if (!inputArray) {
+                inputArray = [];
+            }
+            else if (!Array.isArray(inputArray)) {
+                throw new Error(key + ' is not an array.');
+            }
+            response[key] = inputArray.map(function (inputOfItem) { return factory(inputOfItem, definitions.objects[key]); }).filter(function (d) { return !!d; });
+        });
+    }
     if (definitions.objectMap) {
         var keys = Object.keys(definitions.objectMap);
         keys.map(function (key) {
@@ -154,7 +170,7 @@ function factory(input, definitions) {
                     }
                 }
                 if (!foundAlternative) {
-                    if (definitions.default && typeof (definitions === null || definitions === void 0 ? void 0 : definitions.default[key]) !== 'undefined') {
+                    if (definitions.default && typeof definitions.default[key] !== 'undefined') {
                         response[key] = definitions.default[key];
                     }
                     else {

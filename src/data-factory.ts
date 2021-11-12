@@ -58,6 +58,12 @@ interface DefinitionForFactory {
 	object?: { [key: string]: DefinitionForFactory };
 
 	/**
+	 * Property should be array of objects. Supply their own DefinitionForFactory.
+	 * Similar to subItem, but here, give just a definition of the subobjects.
+	 */
+	objects?: { [key: string]: DefinitionForFactory };
+
+	/**
 	 * Property should be object. Apply a function for every its property to normalize it.
 	 */
 	objectMap?: { [key: string]: (any) => any };
@@ -168,6 +174,24 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		);
 	}
 
+	if (definitions.objects) {
+		let keys = Object.keys(definitions.objects);
+		keys.map(
+			(key) => {
+				if (typeof definitions.objects[key] !== 'object') {
+					throw new Error('objects[' + key + '] must be a object with definition!');
+				}
+				let inputArray = clonedInput[key];
+				if (!inputArray) {
+					inputArray = [];
+				} else if (!Array.isArray(inputArray)) {
+					throw new Error(key + ' is not an array.');
+				}
+				response[key] = inputArray.map((inputOfItem) => factory(inputOfItem, definitions.objects[key])).filter((d) => !!d);
+			},
+		);
+	}
+
 	if (definitions.objectMap) {
 		let keys = Object.keys(definitions.objectMap);
 		keys.map(
@@ -238,7 +262,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 						}
 					}
 					if (!foundAlternative) {
-						if (definitions.default && typeof definitions?.default[key] !== 'undefined') {
+						if (definitions.default && typeof definitions.default[key] !== 'undefined') {
 							response[key] = definitions.default[key];
 						} else {
 							response[key] = null;

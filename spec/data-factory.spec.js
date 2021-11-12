@@ -252,5 +252,47 @@ describe('DataFactory', function () {
         expect(result.onlyInFrom3).toBe('1000');
         expect(result.stringFrom).toBe('10');
     });
+    it('factory() should handle "objects" in definition', function () {
+        var source = {
+            a: 100,
+            stuff: [{ num: '100', char: 1 }, { num: 200, char: '2' }, { char: 3 }],
+            otherStuff: [{ a: '1' }, { a: '2' }, { a: 3 }],
+        };
+        var out = data_factory_1.factory(source, {
+            string: ['a'],
+            objects: {
+                stuff: {
+                    string: ['char'],
+                    number: ['num'],
+                    default: {
+                        num: 1000,
+                    }
+                },
+                otherStuff: {
+                    number: ['a', 'b'],
+                    map: {
+                        a: function (s) { return (s * 2); },
+                    },
+                    default: {
+                        b: '5',
+                    },
+                }
+            }
+        });
+        expect(out.stuff.length).toBe(3);
+        expect(out.stuff[0].num).toBe(100);
+        expect(out.stuff[0].char).toBe('1');
+        expect(out.stuff[1].num).toBe(200);
+        expect(out.stuff[1].char).toBe('2');
+        expect(out.stuff[2].num).toBe(1000);
+        expect(out.stuff[2].char).toBe('3');
+        expect(out.otherStuff.length).toBe(3);
+        expect(out.otherStuff[0].a).toBe(2);
+        expect(out.otherStuff[0].b).toBe(5);
+        expect(out.otherStuff[1].a).toBe(4);
+        expect(out.otherStuff[1].b).toBe(5);
+        expect(out.otherStuff[2].a).toBe(6);
+        expect(out.otherStuff[2].b).toBe(5);
+    });
 });
 //# sourceMappingURL=data-factory.spec.js.map

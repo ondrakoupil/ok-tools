@@ -13,4 +13,7 @@ export * from './relative-time';
 export * from './spec-chars';
 export * from './time-constants';
 export * from './urls';
+export * from './url-creator';
 export * from './web-address-formatter';
+export * from './shorten';
+export * from './strip-tags';

@@ -15,7 +15,7 @@ export function numberFormat(input: number|string, decimals = 0, decPoint = '.',
 	let sep = thousandsSep;
 	let dec = decPoint;
 	let s = [];
-	let toFixedFix = function (num, precision) {
+	let toFixedFix = function (num: number, precision: number) {
 		let k = Math.pow(10, prec);
 		return '' + (Math.round(num * k) / k)
 			.toFixed(precision);

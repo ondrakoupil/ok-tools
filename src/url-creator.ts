@@ -23,13 +23,18 @@ export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunc
 	}
 
 	return (idOrObjectWithId: string | { id: string }, slug = '') => {
+		// @ts-ignore
 		if (typeof idOrObjectWithId === 'object' && idOrObjectWithId[idKeyName]) {
-			if (idOrObjectWithId[slugKeyName]) {
-				return [...startUrlWith, idOrObjectWithId[idKeyName], idOrObjectWithId[slugKeyName]];
+			// @ts-ignore
+			let theSlugValue: string = (idOrObjectWithId[slugKeyName] || '');
+			// @ts-ignore
+			let theIdValue: string = (idOrObjectWithId[idKeyName] || '');
+			if (theSlugValue) {
+				return [...startUrlWith, theIdValue, theSlugValue];
 			} else if (slug) {
-				return [...startUrlWith, idOrObjectWithId[idKeyName], slug];
+				return [...startUrlWith, theIdValue, slug];
 			} else {
-				return [...startUrlWith, idOrObjectWithId[idKeyName]];
+				return [...startUrlWith, theIdValue];
 			}
 		}
 		if (typeof idOrObjectWithId === 'string') {

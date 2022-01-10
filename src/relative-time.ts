@@ -6,11 +6,16 @@ import { parseTime } from './parse-time';
 export function relativeTime(
 	input: Date | number | string,
 	language: Languages = Languages.CZECH,
-	now: Date = null
+	now: Date|null = null
 ): string {
 
 	let date = parseTime(input);
-	let thatTime = date.getTime();
+
+	if (!date) {
+		return '';
+	}
+
+	let thatTime = date!.getTime();
 
 	if (!now) {
 		now = new Date();
@@ -68,6 +73,7 @@ export function relativeTime(
 		}
 		if (!yesterdayText) {
 			let dayInWeek = date.getDay();
+			// @ts-ignore
 			yesterdayText = Days.localAt[language][dayInWeek] + ' ';
 		}
 
@@ -82,16 +88,20 @@ export function relativeTime(
 	// tento rok
 	if (yearStart.getFullYear() === date.getFullYear()) {
 		if (language === Languages.CZECH) {
+			// @ts-ignore
 			return (date.getDate()) + '. ' + Months.namesGenitive[language][date.getMonth() + 1];
 		} else {
+			// @ts-ignore
 			return Months.names[language][date.getMonth() + 1] + ' ' + (date.getDate());
 		}
 	}
 
 	// ještě dříve
 	if (language === Languages.CZECH) {
+		// @ts-ignore
 		return (date.getDate()) + '. ' + Months.namesGenitive[language][date.getMonth() + 1] + ' ' + (date.getFullYear());
 	} else {
+		// @ts-ignore
 		return Months.names[language][date.getMonth() + 1] + ' ' + (date.getDate()) + ', ' + (date.getFullYear());
 	}
 

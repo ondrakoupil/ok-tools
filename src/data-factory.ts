@@ -49,7 +49,7 @@ interface DefinitionForFactory {
 	 *
 	 * Also, you can supply a function that receives the source object and returns expected value.
 	 */
-	from?: { [key: string]: (string | ((any) => any)) };
+	from?: { [key: string]: (string | ((from: any) => any)) };
 
 	/**
 	 * Property should be object. Supply their own DefinitionForFactory.
@@ -66,23 +66,23 @@ interface DefinitionForFactory {
 	/**
 	 * Property should be object. Apply a function for every its property to normalize it.
 	 */
-	objectMap?: { [key: string]: (any) => any };
+	objectMap?: { [key: string]: (from: any) => any };
 
 	/**
 	 * Property should be object. Apply a factory function for it.
 	 * Similar to object, but here, give a factory function.
 	 */
-	subItem?: { [key: string]: (any) => any };
+	subItem?: { [key: string]: (from: any) => any };
 
 	/**
 	 * Property should be an array of objects. Apply a factory function to each item.
 	 */
-	subItems?: { [key: string]: (any) => any };
+	subItems?: { [key: string]: (from: any) => any };
 
 	/**
 	 * After applying all other rules and checks, apply a map function to resulting values.
 	 */
-	map?: { [key: string]: (any) => any };
+	map?: { [key: string]: (from: any) => any };
 
 	/**
 	 * The value must be in array of given options. It also normalizes strings/numbers.
@@ -108,7 +108,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.from);
 		keys.forEach(
 			(key) => {
-				let value = definitions.from[key];
+				let value = definitions.from![key];
 				if (typeof value === 'function') {
 					let out = value(clonedInput);
 					clonedInput[key] = out;
@@ -169,7 +169,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.object);
 		keys.map(
 			(key) => {
-				response[key] = factory(clonedInput[key], definitions.object[key]);
+				response[key] = factory(clonedInput[key], definitions.object![key]);
 			},
 		);
 	}
@@ -178,7 +178,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.objects);
 		keys.map(
 			(key) => {
-				if (typeof definitions.objects[key] !== 'object') {
+				if (typeof definitions.objects![key] !== 'object') {
 					throw new Error('objects[' + key + '] must be a object with definition!');
 				}
 				let inputArray = clonedInput[key];
@@ -187,7 +187,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 				} else if (!Array.isArray(inputArray)) {
 					throw new Error(key + ' is not an array.');
 				}
-				response[key] = inputArray.map((inputOfItem) => factory(inputOfItem, definitions.objects[key])).filter((d) => !!d);
+				response[key] = inputArray.map((inputOfItem: any) => factory(inputOfItem, definitions.objects![key])).filter((d: any) => !!d);
 			},
 		);
 	}
@@ -200,7 +200,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 				if (clonedInput[key]) {
 					Object.keys(clonedInput[key]).map(
 						(itemKey) => {
-							response[key][itemKey] = definitions.objectMap[key](clonedInput[key][itemKey]);
+							response[key][itemKey] = definitions.objectMap![key](clonedInput[key][itemKey]);
 						},
 					);
 				}
@@ -212,10 +212,10 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.subItem);
 		keys.map(
 			(key) => {
-				if (typeof definitions.subItem[key] !== 'function') {
+				if (typeof definitions.subItem![key] !== 'function') {
 					throw new Error('subItem[' + key + '] must be a function!');
 				}
-				response[key] = definitions.subItem[key](clonedInput[key]);
+				response[key] = definitions.subItem![key](clonedInput[key]);
 			},
 		);
 	}
@@ -224,7 +224,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.subItems);
 		keys.map(
 			(key) => {
-				if (typeof definitions.subItems[key] !== 'function') {
+				if (typeof definitions.subItems![key] !== 'function') {
 					throw new Error('subItems[' + key + '] must be a function!');
 				}
 				let inputArray = clonedInput[key];
@@ -233,7 +233,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 				} else if (!Array.isArray(inputArray)) {
 					throw new Error(key + ' is not an array.');
 				}
-				response[key] = inputArray.map((v) => definitions.subItems[key](v));
+				response[key] = inputArray.map((v: any) => definitions.subItems![key](v));
 			},
 		);
 	}
@@ -242,7 +242,7 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.enum);
 		keys.map(
 			(key) => {
-				let allowedValues = definitions.enum[key];
+				let allowedValues = definitions.enum![key];
 				if (!Array.isArray(allowedValues)) {
 					throw new Error('Not an array: definitions.enum[' + key + ']');
 				}
@@ -279,10 +279,10 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		let keys = Object.keys(definitions.map);
 		keys.map(
 			(key) => {
-				if (!definitions.map[key] || typeof definitions.map[key] !== 'function') {
+				if (!definitions.map![key] || typeof definitions.map![key] !== 'function') {
 					throw new Error('Not a function: definitions.map[' + key + ']');
 				}
-				response[key] = definitions.map[key](response[key]);
+				response[key] = definitions.map![key](response[key]);
 			},
 		);
 	}

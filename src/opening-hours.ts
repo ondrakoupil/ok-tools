@@ -1,3 +1,5 @@
+import { keyframes } from '@angular/animations';
+
 export type OpeningHour = number;
 
 export interface OpeningHoursInterval {
@@ -25,7 +27,7 @@ export enum OpeningHoursStatus {
 export interface OpeningHoursResult {
 	currentStatus: OpeningHoursStatus;
 	nextStatus: OpeningHoursStatus;
-	nextChangeDay: number;
+	nextChangeDay: number | null;
 	nextChangeTime: OpeningHour;
 	nextChangeIsToday: boolean;
 	nextChangeIsTomorrow: boolean;
@@ -62,7 +64,9 @@ export function parseWeek(input: { [key: number]: string }, returnNullIfEmpty = 
 
 	let isAnything = false;
 	for (let i = 1; i <= 7; i++) {
+		// @ts-ignore
 		r[i] = parseDay(input[i]);
+		// @ts-ignore
 		if (r[i].length > 0) {
 			isAnything = true;
 		}
@@ -90,7 +94,7 @@ export function parseDay(input: string): OpeningHoursDay {
 				return null;
 			}
 		}
-	).filter(r => !!r);
+	).filter(r => !!r) as OpeningHoursInterval[];
 
 	ints.sort(
 		(i1, i2) => {
@@ -110,7 +114,7 @@ function filterIntervalsForOverlapping(ints: OpeningHoursInterval[], recursiveFa
 	}
 
 	// Check for interlapping intervals and merge them if necessary
-	let omitIntervalsWithTheseIndices = {};
+	let omitIntervalsWithTheseIndices: any = {};
 	ints.forEach(
 		(thisInterval: OpeningHoursInterval, index) => {
 			let nextInterval = ints[index + 1];
@@ -157,7 +161,7 @@ function filterIntervalsForOverlapping(ints: OpeningHoursInterval[], recursiveFa
 
 }
 
-export function parseInterval(input: string): OpeningHoursInterval {
+export function parseInterval(input: string): OpeningHoursInterval|null {
 	if (!input) {
 		return null;
 	}
@@ -246,7 +250,7 @@ export function formatDay(input: OpeningHoursDay): string {
 	return input.map((r) => formatInterval(r)).join(', ');
 }
 
-export function formatWeek(input: OpeningHoursWeek, now: Date = null): OpeningHoursFormatted {
+export function formatWeek(input: OpeningHoursWeek, now: Date|null = null): OpeningHoursFormatted {
 	if (!now) {
 		now = new Date();
 	}
@@ -256,10 +260,12 @@ export function formatWeek(input: OpeningHoursWeek, now: Date = null): OpeningHo
 	}
 	let result: OpeningHoursFormatted = [];
 
-	let currentRow: OpeningHoursFormattedRow;
+	let currentRow: OpeningHoursFormattedRow|null = null;
 
 	for (let i = 1; i <= 7; i++) {
-		let thisDayFormatted = formatDay(input[i]);
+		// @ts-ignore
+		let theDay: OpeningHoursDay = input[i];
+		let thisDayFormatted = formatDay(theDay);
 		if (!currentRow || thisDayFormatted !== currentRow.hours) {
 			if (currentRow) {
 				result.push(currentRow);
@@ -293,7 +299,7 @@ export function formatWeek(input: OpeningHoursWeek, now: Date = null): OpeningHo
 	return result;
 }
 
-export function processHours(hours: OpeningHoursWeek, now: Date = null): OpeningHoursResult {
+export function processHours(hours: OpeningHoursWeek, now: Date|null = null): OpeningHoursResult {
 	if (!now) {
 		now = new Date();
 	}
@@ -301,7 +307,9 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 	if (!day) {
 		day = 7;
 	}
+	// @ts-ignore
 	let todayRules: OpeningHoursDay = hours[day];
+	// @ts-ignore
 	let yesterdayRules: OpeningHoursDay = day === 1 ? hours[7] : hours[day - 1];
 	let thisTime = now.getHours() + now.getMinutes() / 60;
 
@@ -345,8 +353,11 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 	}
 
 	// Special scenario - we are open and we close tomorrow
-	if (nextChange > 24) {
+	if (nextChange && nextChange > 24) {
 		nextChange -= 24;
+		if (!nextChangeDay) {
+			nextChangeDay = 0;
+		}
 		nextChangeDay += 1;
 		nextChangeIsToday = false;
 		nextChangeIsTomorrow = true;
@@ -372,6 +383,7 @@ export function processHours(hours: OpeningHoursWeek, now: Date = null): Opening
 			if (nextChange !== null) {
 				break;
 			}
+			// @ts-ignore
 			for (let interval of hours[nextDay]) {
 				if (nextChange !== null) {
 					break;

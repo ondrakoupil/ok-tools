@@ -9,6 +9,7 @@ let map = {
 export function specChars(input: string) {
 	return input.replace(
 		/[&<>"']/g,
+		// @ts-ignore
 		m => map[m]
 	);
 }

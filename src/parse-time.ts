@@ -1,6 +1,6 @@
 export function parseTime(input: string | Date | number, returnNullOnInvalid = true) {
 
-	let date: Date;
+	let date = new Date();
 
 	if (typeof input === 'string') {
 		let number = parseInt(input, 10);
@@ -43,7 +43,7 @@ export function parseTime(input: string | Date | number, returnNullOnInvalid = t
 					parseInt(matchHuman[1]),
 					parseInt(matchHuman[5]) || 12,
 					parseInt(matchHuman[6]) || 0,
-					parseInt(matchHuman[8]) || 0
+					parseInt(matchHuman[8]) || 0,
 				);
 			}
 

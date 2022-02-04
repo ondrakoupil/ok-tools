@@ -5,9 +5,10 @@ export function range(from: number, to: number): number[];
 export function range(from: number, to: number, step: number): number[];
 export function range(from: number, to?: number, step = 1): number[] {
 
-	if (to === undefined && step === 1) {
+	if (to === undefined) {
 		to = from - 1;
 		from = 0;
+		step = 1;
 	}
 
 	if (from > to) {

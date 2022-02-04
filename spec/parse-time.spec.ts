@@ -56,4 +56,29 @@ describe('ParseTime function', function() {
 
 	});
 
+	it('should handle correctly czech string input', function() {
+
+		let res = parseTime('2. 5. 2021');
+		expect(res.getMonth()).toBe(4); // May, not Febuary!
+		expect(res.getDate()).toBe(2);
+		expect(res.getFullYear()).toBe(2021);
+
+		let res2 = parseTime('10. 4. 2022   10:23:01');
+		expect(res2.getMonth()).toBe(3);
+		expect(res2.getDate()).toBe(10);
+		expect(res2.getFullYear()).toBe(2022);
+		expect(res2.getHours()).toBe(10);
+		expect(res2.getMinutes()).toBe(23);
+		expect(res2.getSeconds()).toBe(1);
+
+		let res3 = parseTime('10. 4. 2022 10.23');
+		expect(res3.getMonth()).toBe(3);
+		expect(res3.getDate()).toBe(10);
+		expect(res3.getFullYear()).toBe(2022);
+		expect(res3.getHours()).toBe(10);
+		expect(res3.getMinutes()).toBe(23);
+		expect(res3.getSeconds()).toBe(0);
+
+	});
+
 });

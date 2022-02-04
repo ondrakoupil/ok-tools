@@ -1,11 +1,11 @@
-import {relativeTime} from '../src/relative-time';
+import { relativeTime } from '../src/relative-time';
 import { Words } from '../src/time-constants';
 import { Languages } from '../src/languages.enum';
 import { parseTime } from '../src/parse-time';
 
-describe('Relative Time function', function() {
+describe('Relative Time function', function () {
 
-	it('should handle correct inputs', function() {
+	it('should handle correct inputs', function () {
 
 		let now = new Date();
 		let someDate = new Date();
@@ -36,12 +36,6 @@ describe('Relative Time function', function() {
 
 		expect(
 			() => {
-				relativeTime('foo');
-			}
-		).toThrow();
-
-		expect(
-			() => {
 				let futureTime = new Date(now.getTime() + 10000000);
 				relativeTime(futureTime);
 			}
@@ -49,7 +43,7 @@ describe('Relative Time function', function() {
 
 	});
 
-	it('should work without giving exact time.', function() {
+	it('should work without giving exact time.', function () {
 
 		// seconds ago
 		let someTimeAgo = new Date();
@@ -79,7 +73,7 @@ describe('Relative Time function', function() {
 
 	});
 
-	it('should return correct values for these test scenarios', function() {
+	it('should return correct values for these test scenarios', function () {
 
 		let basicTime = parseTime('2017-05-13 12:00:00');
 

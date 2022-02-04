@@ -1,5 +1,3 @@
-import { keyframes } from '@angular/animations';
-
 export type OpeningHour = number;
 
 export interface OpeningHoursInterval {

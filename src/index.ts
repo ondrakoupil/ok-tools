@@ -5,6 +5,7 @@ export * from './languages.enum';
 export * from './nl2br';
 export * from './number-format';
 export * from './opening-hours';
+export * from './paginator';
 export * from './parse-time';
 export * from './phone-number-formatter';
 export * from './pluralize';

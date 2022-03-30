@@ -2,10 +2,13 @@
 	"compileOnSave": true,
 	"compilerOptions": {
 		"sourceMap": true,
-		"declaration": false,
+		"module": "CommonJS",
+		"declaration": true,
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"target": "es5",
+		"strict": true,
+		"outDir": "dist",
 		"typeRoots": [
 			"node_modules/@types"
 		],
@@ -16,10 +19,10 @@
 		]
 	},
 	"include": [
-		"src/**/*.ts",
-		"spec/**/*.spec.ts"
+		"src/**/*.ts"
 	],
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"spec/**/*.spec.ts"
 	]
 }

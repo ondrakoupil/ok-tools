@@ -75,7 +75,7 @@ describe('Relative Time function', function () {
 
 	it('should return correct values for these test scenarios', function () {
 
-		let basicTime = parseTime('2017-05-13 12:00:00');
+		let basicTime = parseTime('2017-05-13 12:00:00')!;
 
 		// Nyní
 		expect(

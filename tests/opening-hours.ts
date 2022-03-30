@@ -95,7 +95,7 @@ describe('Opening hours calculator', function () {
 
 
 	it('should parse week', function () {
-		let parsed = oh.parseWeek(['1-19', '9-20', '9-20', '9-20', '', '9-20, 21-23', '']);
+		let parsed = oh.parseWeek(['1-19', '9-20', '9-20', '9-20', '', '9-20, 21-23', ''])!;
 		expect(parsed[1][0].open).toBe(1);
 		expect(parsed[5]).toEqual([]);
 		expect(parsed[6]).toEqual([{open: 9, close: 20}, {open: 21, close: 23}]);
@@ -103,23 +103,23 @@ describe('Opening hours calculator', function () {
 	});
 
 	it('should parse week with different formats', function () {
-		let parsed = oh.parseWeek(['', '1-10', '2-20', '3-10', '4-20', '5-10', '6-20', '7-10']);
+		let parsed = oh.parseWeek(['', '1-10', '2-20', '3-10', '4-20', '5-10', '6-20', '7-10'])!;
 		expect(parsed[1][0].open).toBe(1);
 		expect(parsed[5][0].open).toBe(5);
 		expect(parsed[7][0].open).toBe(7);
 
-		let parsed2 = oh.parseWeek({1: '1-10', 2: '2-10', 3: '3-10', 4: '4-10', 5: '5-10', 6: '6-10', 7: '7-10'});
+		let parsed2 = oh.parseWeek({1: '1-10', 2: '2-10', 3: '3-10', 4: '4-10', 5: '5-10', 6: '6-10', 7: '7-10'})!;
 		expect(parsed2[1][0].open).toBe(1);
 		expect(parsed2[5][0].open).toBe(5);
 		expect(parsed2[7][0].open).toBe(7);
 
-		let parsed3 = oh.parseWeek(['', '1-10', '2-20']);
+		let parsed3 = oh.parseWeek(['', '1-10', '2-20'])!;
 		expect(parsed3[1].length).toBe(0);
 		expect(parsed3[2][0].open).toBe(1);
 		expect(parsed3[3][0].open).toBe(2);
 		expect(parsed3[4].length).toBe(0);
 
-		let parsed4 = oh.parseWeek({2: '1-10', 4: '2-10', 6: '3-10'});
+		let parsed4 = oh.parseWeek({2: '1-10', 4: '2-10', 6: '3-10'})!;
 		expect(parsed4[2][0].open).toBe(1);
 		expect(parsed4[4][0].open).toBe(2);
 		expect(parsed4[6][0].open).toBe(3);
@@ -127,17 +127,17 @@ describe('Opening hours calculator', function () {
 	});
 
 	it('should handle empty input when parsing week', function () {
-		let parsed1 = oh.parseWeek([]);
+		let parsed1 = oh.parseWeek([])!;
 		expect(Object.keys(parsed1).length).toBe(7);
 		expect(parsed1[1].length).toBe(0);
 
-		let parsed2 = oh.parseWeek(['', '', '', '', '', '', '']);
+		let parsed2 = oh.parseWeek(['', '', '', '', '', '', ''])!;
 		expect(Object.keys(parsed2).length).toBe(7);
 		expect(parsed2[1].length).toBe(0);
 
 
 		let parsed3 = oh.parseWeek([], true);
-		let parsed4 = oh.parseWeek(['', '', '', '', '', '', ''], true);
+		let parsed4 = oh.parseWeek(['', '', '', '', '', '', ''], true)!;
 		expect(parsed3).toBeNull();
 		expect(parsed4).toBeNull();
 	});
@@ -294,7 +294,7 @@ describe('Opening hours calculator', function () {
 
 	it('should correctly analyze opening hours in complicated scenarios', function () {
 
-		let hours = parseWeek(['10-22', '10-05', '15-20, 23-3', '10-03', '10-03', '', '']);
+		let hours = parseWeek(['10-22', '10-05', '15-20, 23-3', '10-03', '10-03', '', ''])!;
 
 		let res = processHours(hours, new Date('2019-05-13 05:00')); // Monday before opening
 		expect(res.currentStatus).toBe(oh.OpeningHoursStatus.CLOSED);

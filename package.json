@@ -1,37 +1,40 @@
 {
-  "name": "ok-tools",
-  "version": "1.0.0",
-  "description": "My personal JS tools and utilities",
-  "main": "index.js",
-  "scripts": {
-    "test": "node_modules/.bin/jasmine",
-    "browserify": "browserify src/*.js -o bundle.js",
-    "browserify-all": "browserify src/*.js spec/*.spec.js -o bundle.js",
-    "test-browsers": "npm run browserify-all && karma start --single-run; rm bundle.js",
-    "lint": "node_modules/.bin/tslint -c tslint.json --project .",
-    "barrel": "node_modules/.bin/barrelsby --delete -d src && node_modules/.bin/tslint --fix src/index.ts && echo \"export * from './src/index';\" > index.ts",
-    "tsc": "tsc",
-    "tsc-watch": "tsc -w"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://OK@localhost:/Users/OK/PHP/js/packages/tools"
-  },
-  "author": "Ondrej Koupil <ondrakoupil@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/jasmine": "^2.5.54",
-    "barrelsby": ">=0.0.5",
-    "browserify": "^14.4.0",
-    "jasmine": "^2.8.0",
-    "karma": "^1.7.1",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.0.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-opera-launcher": "^1.0.0",
-    "karma-safari-launcher": "^1.0.0",
-    "tslint": "^5.7.0",
-    "typescript": ">=3.7",
-    "fsevents": "^1.2.13"
-  }
+	"name": "ok-tools",
+	"version": "1.0.0",
+	"description": "My personal JS tools and utilities",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"build-watch": "tsc -w",
+		"test": "jest",
+		"lint": "node_modules/.bin/tslint -c tslint.json --project .",
+		"prepare": "npm run build",
+		"prepublishOnly": "npm test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/ondrakoupil/js-tools.git"
+	},
+	"keywords": ["Tools"],
+	"author": "Ondřej Koupil <ondra@ondrakoupil.cz>",
+	"license": "MIT",
+	"devDependencies": {
+		"@babel/core": "^7.17.8",
+		"@babel/preset-env": "^7.16.11",
+		"@sinonjs/fake-timers": "^9.1.1",
+		"@types/jest": "^27.4.1",
+		"@types/sinonjs__fake-timers": "^8.1.2",
+		"babel-jest": "^27.5.1",
+		"barrelsby": ">=0.0.5",
+		"browserify": "^14.4.0",
+		"fsevents": "^1.2.13",
+		"jest": "^27.5.1",
+		"ts-jest": "^27.1.4",
+		"tslint": "^5.7.0",
+		"typescript": ">=3.7"
+	},
+	"files": [
+		"dist/**/*"
+	]
 }

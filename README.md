@@ -1,8 +1,14 @@
 # OK Tools
 
-This is my personal set of various JS tools I use in my projects.
+This is my personal set of various JS tools I use in my projects. Zero dependencies.
 
 Feel free to use them, but please keep in mind that I guarantee nothing.
+
+## Install
+
+Via NPM: `npm install ok-tools`
+
+For Angular, there is `ok-angular-tools` package wrapping these into handy pipes or directives.
 
 ## Contents
 

@@ -14,9 +14,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://gitlab.com/ondrakoupil/js-tools.git"
+		"url": "https://github.com/ondrakoupil/ok-tools"
 	},
-	"keywords": ["Tools"],
+	"keywords": ["Tools", "JavaScript", "Personal"],
 	"author": "Ondřej Koupil <ondra@ondrakoupil.cz>",
 	"license": "MIT",
 	"devDependencies": {

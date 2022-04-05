@@ -1,6 +1,6 @@
 {
 	"name": "ok-tools",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "My personal JS tools and utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -16,7 +16,11 @@
 		"type": "git",
 		"url": "https://github.com/ondrakoupil/ok-tools"
 	},
-	"keywords": ["Tools", "JavaScript", "Personal"],
+	"keywords": [
+		"Tools",
+		"JavaScript",
+		"Personal"
+	],
 	"author": "Ondřej Koupil <ondra@ondrakoupil.cz>",
 	"license": "MIT",
 	"devDependencies": {

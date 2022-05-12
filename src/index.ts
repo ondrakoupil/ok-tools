@@ -19,3 +19,4 @@ export * from './time-constants';
 export * from './url-creator';
 export * from './urls';
 export * from './web-address-formatter';
+export * from './sample';

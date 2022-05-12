@@ -1,4 +1,4 @@
-import { createUrlCreator } from '../src';
+import { createUrlCreator } from '../src/url-creator';
 
 describe('UrlCreator', function () {
 

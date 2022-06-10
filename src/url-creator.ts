@@ -1,7 +1,7 @@
 interface CreateUrlCreatorParams {
 	urlBase: string[];
-	slugKeyName?: string;
-	idKeyName?: string;
+	slugKeyName?: string | false;
+	idKeyName?: string | false;
 	addFirstSlash?: boolean;
 }
 
@@ -12,8 +12,14 @@ export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunc
 	if (!params.urlBase || !params.urlBase.length) {
 		throw new Error('params.urlBase is required!');
 	}
-	let idKeyName = params.idKeyName || 'id';
-	let slugKeyName = params.slugKeyName || 'url';
+	let idKeyName = params.idKeyName;
+	let slugKeyName = params.slugKeyName;
+	if (!idKeyName && idKeyName !== false) {
+		idKeyName = 'id';
+	}
+	if (!slugKeyName && slugKeyName !== false) {
+		slugKeyName = 'url';
+	}
 	let startUrlWith = params.urlBase;
 
 	if (typeof params.addFirstSlash === 'undefined' || params.addFirstSlash) {
@@ -24,17 +30,24 @@ export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunc
 
 	return (idOrObjectWithId: string | { id: string }, slug = '') => {
 		// @ts-ignore
-		if (typeof idOrObjectWithId === 'object' && idOrObjectWithId[idKeyName]) {
+		if (typeof idOrObjectWithId === 'object' && (idOrObjectWithId[idKeyName] || idKeyName === false)) {
 			// @ts-ignore
-			let theSlugValue: string = (idOrObjectWithId[slugKeyName] || '');
+			let theSlugValue: string = slugKeyName ? (idOrObjectWithId[slugKeyName] || '') : '';
 			// @ts-ignore
-			let theIdValue: string = (idOrObjectWithId[idKeyName] || '');
-			if (theSlugValue) {
-				return [...startUrlWith, theIdValue, theSlugValue];
-			} else if (slug) {
-				return [...startUrlWith, theIdValue, slug];
+			let theIdValue: string = idKeyName ? (idOrObjectWithId[idKeyName] || '') : '';
+			if (theSlugValue || slug) {
+				let slugValue = theSlugValue || slug;
+				if (theIdValue) {
+					return [...startUrlWith, theIdValue, slugValue];
+				} else {
+					return [...startUrlWith, slugValue];
+				}
 			} else {
-				return [...startUrlWith, theIdValue];
+				if (theIdValue) {
+					return [...startUrlWith, theIdValue];
+				} else {
+					return [...startUrlWith];
+				}
 			}
 		}
 		if (typeof idOrObjectWithId === 'string') {

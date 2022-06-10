@@ -42,4 +42,41 @@ describe('UrlCreator', function () {
 
 	});
 
+	it('should work without giving IDs or slugs into the URL if configured so', function () {
+
+		let urlCreatorNoId = createUrlCreator({
+			urlBase: ['abc', 'def'],
+			idKeyName: false,
+			slugKeyName: 'short'
+		});
+
+		let url1 = urlCreatorNoId('10');
+
+		let url2 = urlCreatorNoId({id: '103', short: 'hellp'});
+
+		let url3 = urlCreatorNoId('10', 'slugggo');
+
+		expect(url1.join('/')).toBe('/abc/def/10');
+		expect(url2.join('/')).toBe('/abc/def/hellp');
+		expect(url3.join('/')).toBe('/abc/def/10/slugggo');
+
+
+		let urlCreatorNoSlug = createUrlCreator({
+			urlBase: ['abc', 'def'],
+			idKeyName: 'aaa',
+			slugKeyName: false
+		});
+
+		url1 = urlCreatorNoSlug('10');
+
+		url2 = urlCreatorNoSlug({aaa: '103', id: '400', url: 'hellp', slug: 'dddddd'});
+
+		url3 = urlCreatorNoSlug('20', 'slagg');
+
+		expect(url1.join('/')).toBe('/abc/def/10');
+		expect(url2.join('/')).toBe('/abc/def/103');
+		expect(url3.join('/')).toBe('/abc/def/20/slagg');
+
+	});
+
 });

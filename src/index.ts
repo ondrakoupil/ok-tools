@@ -20,3 +20,4 @@ export * from './url-creator';
 export * from './urls';
 export * from './web-address-formatter';
 export * from './sample';
+export * from './calculate-distance';

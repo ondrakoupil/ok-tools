@@ -8,7 +8,7 @@ export function number(input: any) {
 }
 
 
-export function string(input: any) {
+export function string(input: any): string {
 	if (!input) {
 		return '';
 	}
@@ -21,7 +21,7 @@ export function string(input: any) {
 	return '';
 }
 
-export function boolean(input: any) {
+export function boolean(input: any): boolean {
 	if (input && Array.isArray(input) && input.length === 0) {
 		return false;
 	}
@@ -35,7 +35,7 @@ export function date(input: any, returnNullOnError = true): Date | null {
 	return parseTime(input, returnNullOnError);
 }
 
-interface DefinitionForFactory {
+export interface DefinitionForFactory {
 	default?: any;
 	number?: string[];
 	string?: string[];
@@ -93,6 +93,11 @@ interface DefinitionForFactory {
 	 * Anything can be in there properties. Do not check anything.
 	 */
 	any?: string[];
+
+	/**
+	 * Parent factory function, useful when extending parent interfaces
+	 */
+	extends?: (from: any) => any;
 }
 
 export function factory<T = any>(input: any, definitions: DefinitionForFactory): T {
@@ -298,6 +303,12 @@ export function factory<T = any>(input: any, definitions: DefinitionForFactory):
 		);
 	}
 
+	if (definitions.extends) {
+		response = {
+			...definitions.extends(clonedInput),
+			...response,
+		};
+	}
 
 	return response;
 

@@ -3,9 +3,11 @@ interface CreateUrlCreatorParams {
 	slugKeyName?: string | false;
 	idKeyName?: string | false;
 	addFirstSlash?: boolean;
+	firstSlugOnlyIfArray?: boolean;
+	idKeyNameIfSlugIsMissing?: string;
 }
 
-export type UrlCreatorFunction = (idOrObjectWithId: string | { id: string, [key: string]: any }, slug?: string) => string[];
+export type UrlCreatorFunction = (idOrObjectWithId: string | object, slug?: string | string[]) => string[];
 
 export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunction {
 
@@ -13,9 +15,12 @@ export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunc
 		throw new Error('params.urlBase is required!');
 	}
 	let idKeyName = params.idKeyName;
+	let idKeyNameDefinite: string | false;
 	let slugKeyName = params.slugKeyName;
 	if (!idKeyName && idKeyName !== false) {
-		idKeyName = 'id';
+		idKeyNameDefinite = 'id';
+	} else {
+		idKeyNameDefinite = idKeyName;
 	}
 	if (!slugKeyName && slugKeyName !== false) {
 		slugKeyName = 'url';
@@ -28,13 +33,27 @@ export function createUrlCreator(params: CreateUrlCreatorParams): UrlCreatorFunc
 		}
 	}
 
-	return (idOrObjectWithId: string | { id: string }, slug = '') => {
-		// @ts-ignore
-		if (typeof idOrObjectWithId === 'object' && (idOrObjectWithId[idKeyName] || idKeyName === false)) {
-			// @ts-ignore
-			let theSlugValue: string = slugKeyName ? (idOrObjectWithId[slugKeyName] || '') : '';
-			// @ts-ignore
-			let theIdValue: string = idKeyName ? (idOrObjectWithId[idKeyName] || '') : '';
+	// @ts-ignore
+	return (idOrObjectWithId: string | { [key: string]: any }, slug: string | string[] = '') => {
+		if (
+			typeof idOrObjectWithId === 'object'
+			&& ((idKeyNameDefinite !== false && idOrObjectWithId[idKeyNameDefinite] as string) || idKeyNameDefinite === false)
+		) {
+			let theSlugValueAsStringOrArray: string | string[] = slugKeyName ? (idOrObjectWithId[slugKeyName] || '') : '';
+			let theSlugValue: string;
+			if (Array.isArray(theSlugValueAsStringOrArray)) {
+				if (params.firstSlugOnlyIfArray) {
+					theSlugValue = theSlugValueAsStringOrArray[0];
+				} else {
+					theSlugValue = theSlugValueAsStringOrArray.join('-');
+				}
+			} else {
+				theSlugValue = theSlugValueAsStringOrArray;
+			}
+			let theIdValue: string = idKeyNameDefinite ? (idOrObjectWithId[idKeyNameDefinite] || '') : '';
+			if (params.idKeyNameIfSlugIsMissing && !theSlugValue) {
+				theIdValue = idOrObjectWithId[params.idKeyNameIfSlugIsMissing] || '';
+			}
 			if (theSlugValue || slug) {
 				let slugValue = theSlugValue || slug;
 				if (theIdValue) {

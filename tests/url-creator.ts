@@ -42,6 +42,36 @@ describe('UrlCreator', function () {
 
 	});
 
+	it('should work with array slugs as expected', function () {
+
+		let urlCreator1 = createUrlCreator({
+			urlBase: ['abc', 'def'],
+			slugKeyName: 'slugs',
+			idKeyName: 'number',
+			addFirstSlash: false,
+		});
+
+		let url1 = urlCreator1({number: '10', slugs: ['slug1', 'slug2', 'slug3']});
+		expect(url1.join('/')).toBe('abc/def/10/slug1-slug2-slug3');
+
+		let urlCreator2 = createUrlCreator({
+			urlBase: ['abc', 'def'],
+			slugKeyName: 'slugs',
+			idKeyName: 'number',
+			firstSlugOnlyIfArray: true,
+		});
+
+		let url2 = urlCreator2({number: '20', slugs: ['slugX', 'slug2', 'slug3']});
+		expect(url2.join('/')).toBe('/abc/def/20/slugX');
+
+		let url3 = urlCreator2({number: '30'});
+		expect(url3.join('/')).toBe('/abc/def/30');
+
+		let url4 = urlCreator2('40', ['slug40', 'slug50']);
+		expect(url3.join('/')).toBe('/abc/def/30');
+
+	});
+
 	it('should work without giving IDs or slugs into the URL if configured so', function () {
 
 		let urlCreatorNoId = createUrlCreator({
@@ -76,6 +106,33 @@ describe('UrlCreator', function () {
 		expect(url1.join('/')).toBe('/abc/def/10');
 		expect(url2.join('/')).toBe('/abc/def/103');
 		expect(url3.join('/')).toBe('/abc/def/20/slagg');
+
+	});
+
+	it('should use ID as backup if slug is missing even if configured not to use IDs', function () {
+
+		let urlCreatorNoId = createUrlCreator({
+			urlBase: ['abc', 'def'],
+			idKeyName: false,
+			slugKeyName: 'short',
+			idKeyNameIfSlugIsMissing: 'number',
+			firstSlugOnlyIfArray: true,
+		});
+
+		let url1 = urlCreatorNoId({short: '', id: '10', number: '20'});
+		expect(url1.join('/')).toBe('/abc/def/20');
+
+		let url2 = urlCreatorNoId({short: 'slug', id: '10', number: '40'});
+		expect(url2.join('/')).toBe('/abc/def/slug');
+
+		let url3 = urlCreatorNoId({short: [], id: '10', number: '30'});
+		expect(url3.join('/')).toBe('/abc/def/30');
+
+		let url4 = urlCreatorNoId({short: ['some', 'slug'], id: '10', number: '50'});
+		expect(url4.join('/')).toBe('/abc/def/some');
+
+		let url5 = urlCreatorNoId({absolutely: 'nothing'});
+		expect(url5.join('/')).toBe('/abc/def');
 
 	});
 

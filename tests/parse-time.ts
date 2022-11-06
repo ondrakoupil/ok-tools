@@ -1,4 +1,4 @@
-import { parseTime } from '../src/parse-time';
+import { DateStructNgbLike, parseTime } from '../src/parse-time';
 
 
 describe('ParseTime function', function() {
@@ -78,6 +78,19 @@ describe('ParseTime function', function() {
 		expect(res3.getHours()).toBe(10);
 		expect(res3.getMinutes()).toBe(23);
 		expect(res3.getSeconds()).toBe(0);
+
+	});
+
+	it('should accept ngb-date-like inputs', function() {
+
+		let someTime: DateStructNgbLike = {
+			month: 5,
+			year: 1987,
+			day: 13
+		};
+
+		let res = parseTime(someTime)!;
+		expect(res.toISOString().substr(0, 10)).toBe('1987-05-13');
 
 	});
 

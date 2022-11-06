@@ -1,4 +1,4 @@
-export function parseTime(input: string | Date | number, returnNullOnInvalid = true) {
+export function parseTime(input: string | Date | number | DateStructNgbLike, returnNullOnInvalid = true) {
 
 	let date = new Date();
 
@@ -11,14 +11,19 @@ export function parseTime(input: string | Date | number, returnNullOnInvalid = t
 
 	switch (typeof input) {
 		case 'object':
-			if (!(input instanceof Date)) {
-				if (returnNullOnInvalid) {
-					return null;
-				}
-				throw new Error('Given input must be a Date, parsable string or a number timestamp.');
+			if (input instanceof Date) {
+				date = input;
+				break;
 			}
-			date = input;
-			break;
+			if (input.day && input.month && input.year) {
+				date.setUTCFullYear(input.year, input.month - 1, input.day);
+				date.setHours(0, 0, 0, 0);
+				break;
+			}
+			if (returnNullOnInvalid) {
+				return null;
+			}
+			throw new Error('Given input must be a Date, parsable string or a number timestamp.');
 
 		case 'string':
 			let stringInput = <string>input;
@@ -85,4 +90,10 @@ export function parseTime(input: string | Date | number, returnNullOnInvalid = t
 
 	return date;
 
+}
+
+export interface DateStructNgbLike {
+	day: number;
+	month: number;
+	year: number;
 }

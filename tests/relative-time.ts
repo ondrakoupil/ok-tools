@@ -34,13 +34,6 @@ describe('Relative Time function', function () {
 			relativeTime('2015-01-23')
 		).toBeTruthy();
 
-		expect(
-			() => {
-				let futureTime = new Date(now.getTime() + 10000000);
-				relativeTime(futureTime);
-			}
-		).toThrow();
-
 	});
 
 	it('should work without giving exact time.', function () {
@@ -70,6 +63,46 @@ describe('Relative Time function', function () {
 		).toContain(
 			Words.yesterday[Languages.CZECH]
 		);
+
+		let timeNextSecond = new Date();
+		timeNextSecond.setTime(timeNextSecond.getTime() + 1000);
+		expect(
+			relativeTime(timeNextSecond, Languages.ENGLISH)
+		).toBe(Words.now[Languages.ENGLISH]);
+
+		let timeNext20Seconds = new Date();
+		timeNext20Seconds.setTime(timeNext20Seconds.getTime() + 1000 * 20);
+		expect(
+			relativeTime(timeNext20Seconds)
+		).toBe(Words.momentLater[Languages.CZECH]);
+
+		let timeNext10Minutes = new Date();
+		timeNext10Minutes.setTime(timeNext10Minutes.getTime() + 10 * 60 * 1000 + 123);
+		expect(
+			relativeTime(timeNext10Minutes)
+		).toBe('za 10 minut');
+
+		let timeNext3hours = new Date();
+		timeNext3hours.setTime(timeNext3hours.getTime() + 1000 * 60 * 60 * 3 * 1.02);
+		expect(
+			relativeTime(timeNext3hours)
+		).toBe('za 3 hodiny');
+
+		expect(
+			relativeTime(
+				'2023-05-14 09:28:43',
+				Languages.CZECH,
+				parseTime('2023-05-13 14:23:43'),
+			)
+		).toBe('zítra v 9:28');
+
+		expect(
+			relativeTime('2023-12-25 05:00:00', Languages.CZECH, parseTime('2023-08-11 09:00:05'))
+		).toBe('25. prosince');
+
+		expect(
+			relativeTime('2025-12-25 05:00:00', Languages.CZECH, parseTime('2023-08-11 09:00:05'))
+		).toBe('25. prosince 2025');
 
 	});
 
@@ -137,7 +170,7 @@ describe('Relative Time function', function () {
 		expect(
 			relativeTime('2017-05-13 01:03:05', Languages.CZECH, basicTime)
 		).toBe(
-			'01:03'
+			'1:03'
 		);
 
 		// Před 15 hodinami - včera, do 1 dne
@@ -158,7 +191,7 @@ describe('Relative Time function', function () {
 		expect(
 			relativeTime('2017-05-12 09:10:21', Languages.CZECH, basicTime)
 		).toBe(
-			'včera v 09:10'
+			'včera v 9:10'
 		);
 
 

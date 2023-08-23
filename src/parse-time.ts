@@ -18,6 +18,7 @@ export function parseTime(input: string | Date | number | DateStructNgbLike, ret
 			if (input.day && input.month && input.year) {
 				date.setUTCFullYear(input.year, input.month - 1, input.day);
 				date.setHours(0, 0, 0, 0);
+				date.setTime(date.getTime() - date.getTimezoneOffset() * 1000 * 60);
 				break;
 			}
 			if (returnNullOnInvalid) {

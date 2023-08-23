@@ -273,16 +273,34 @@ export class Words {
 		'de': 'vor einem Moment',
 	};
 
+	public static readonly momentLater = {
+		'cs': 'za okamžik',
+		'en': 'in a minute',
+		'de': 'in einem Moment',
+	};
+
 	public static readonly minutesAgo = {
 		'cs': ['před %% minutou', 'před %% minutami', 'před %% minutami'],
 		'en': ['%% minute ago', '%% minutes ago', '%% minutes ago'],
 		'de': ['vor %% Minute', 'vor %% Minuten', 'vor %% Minuten'],
 	};
 
+	public static readonly minutesLater = {
+		'cs': ['za %% minutu', 'za %% minuty', 'za %% minut'],
+		'en': ['in %% minute', 'in %% minutes', 'in %% minutes'],
+		'de': ['in %% Minute', 'in %% Minuten', 'in %% Minuten'],
+	};
+
 	public static readonly hoursAgo = {
 		'cs': ['před %% hodinou', 'před %% hodinami', 'před %% hodinami'],
 		'en': ['%% hour ago', '%% hours ago', '%% hours ago'],
 		'de': ['vor %% Stunde', 'vor %% Stunden', 'vor %% Stunden'],
+	};
+
+	public static readonly hoursLater = {
+		'cs': ['za %% hodinu', 'za %% hodiny', 'za %% hodin'],
+		'en': ['in %% hour', 'in %% hours', 'in %% hours'],
+		'de': ['in %% Stunde', 'in %% Stunden', 'in %% Stunden'],
 	};
 
 	public static readonly today = {

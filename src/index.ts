@@ -22,3 +22,5 @@ export * from './web-address-formatter';
 export * from './sample';
 export * from './calculate-distance';
 export * from './array-sum';
+export * from './on-ready';
+export * from './find-on-page';
